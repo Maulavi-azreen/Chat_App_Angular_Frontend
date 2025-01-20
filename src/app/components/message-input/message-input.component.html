@@ -1,0 +1,16 @@
+<div class="message-input d-flex align-items-center">
+  <input
+    type="text"
+    class="form-control me-2"
+    placeholder="Type your message..."
+    [(ngModel)]="messageText"
+    [disabled]="!selectedContact"
+  />
+  <button
+    class="btn btn-primary"
+    (click)="sendMessage()"
+    [disabled]="!messageText || !selectedContact"
+  >
+    Send
+  </button>
+</div>

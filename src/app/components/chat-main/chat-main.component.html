@@ -1,0 +1,36 @@
+<div class="container-fluid chat-main-container d-flex">
+  <!-- Sidebar -->
+  <div class="sidebar col-md-4 border-end">
+    <app-sidebar
+      [contacts]="contacts"
+      (contactSelected)="onContactSelected($event)"
+    ></app-sidebar>
+  </div>
+
+  <!-- Chat Window -->
+  <div class="chat-window col-md-8">
+    <!-- Conditional Rendering -->
+    <ng-container *ngIf="selectedContact; else placeholder">
+      <!-- Chat Window -->
+      <app-chat-window
+        [messages]="messages"
+        [selectedContact]="selectedContact"
+      ></app-chat-window>
+
+      <!-- Message Input -->
+      <app-message-input
+        class="border-top p-3"
+        [selectedContact]="selectedContact"
+        (messageSent)="onMessageSent($event)"
+      ></app-message-input>
+    </ng-container>
+
+    <!-- Placeholder Illustration -->
+    <ng-template #placeholder>
+      <div class="placeholder-container d-flex flex-column justify-content-center align-items-center h-100 mt-5">
+        <img src="assets/img/start-img.jpg" alt="Chat Illustration" class="img-fluid" style="max-width: 500px;" />
+        <p class="text-muted mt-3">Select a contact to start chatting</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

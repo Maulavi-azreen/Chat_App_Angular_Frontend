@@ -1,0 +1,64 @@
+.chat-container {
+  display: flex;
+  background-color: #f8f9fa; /* Light background color */
+  height: 100vh; /* Full viewport height */
+  margin: 0; /* Remove margins */
+  padding: 0; /* Remove padding */
+  overflow: hidden; /* Prevent horizontal scrollbars */
+}
+
+.chat-main-container {
+  display: flex;
+  flex: 1;
+  height: 100%; /* Full height of the container */
+}
+
+.chat-main-container .sidebar {
+  width: 30%; /* Sidebar occupies 30% of the width */
+  height: 100%; /* Full height for sidebar */
+  background-color: #ffffff; /* Sidebar background */
+  border-right: 1px solid #eaeaea; /* Subtle border */
+  padding: 0; /* Remove default padding */
+}
+
+.chat-main-container .chat-window {
+  flex: 1; /* Chat window takes remaining space */
+  height: 100%; /* Full height for chat window */
+  background-color: #ffffff; /* Chat window background */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 0; /* Remove default padding */
+}
+
+.chat-window .message {
+  padding: 10px 15px;
+  margin: 10px;
+  border-radius: 8px;
+}
+
+.chat-window .sent {
+  text-align: right;
+  background-color: #ff4a57; /* Sent message background color */
+  color: white;
+  margin-left: auto;
+}
+
+.chat-window .received {
+  text-align: left;
+  background-color: #f1f1f1; /* Received message background color */
+}
+
+.message-input {
+  padding: 10px;
+  border-top: 1px solid #eaeaea; /* Subtle border at the top */
+  background-color: #ffffff; /* Match the chat window's background */
+}
+.placeholder-container {
+  height: 100%; /* Make it fill the chat window */
+  text-align: center;
+  color: #6c757d; /* Muted text color */
+}
+
+.placeholder-container img {
+  max-width: 200px;
+  margin-bottom: 20px;
+}

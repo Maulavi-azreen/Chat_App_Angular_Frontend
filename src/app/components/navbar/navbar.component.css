@@ -1,0 +1,38 @@
+/* General Navbar Styling */
+.navbar {
+    background-color: white !important;
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff4a57;
+  }
+  
+  /* Navbar Links Styling */
+  .nav-link {
+    color: black !important;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .nav-link:hover {
+    color: #ff4a57 !important;
+    text-decoration: none;
+  }
+  
+  /* "Get Started" Button Styling */
+  .btn-get-started {
+    background-color: #ff4a57 !important;
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .btn-get-started:hover {
+    background-color: #e03e4b !important;
+    color: white !important;
+    text-decoration: none;
+  }
+  

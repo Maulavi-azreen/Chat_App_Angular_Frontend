@@ -1,0 +1,105 @@
+/* Footer Section */
+#footer {
+    background-color: #f8f9fa; /* Light gray background */
+    color: #212529; /* Dark gray text color */
+    padding: 40px 0;
+  }
+  
+  #footer .footer-top {
+    border-bottom: 1px solid #dee2e6; /* Border to separate sections */
+    padding-bottom: 20px;
+  }
+  
+  #footer .footer-about .logo .sitename {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff4a57; /* Primary theme color */
+  }
+  
+  #footer .footer-about .social-links a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    margin-right: 10px;
+    background-color: #dee2e6; /* Light gray for social icons */
+    color: #212529; /* Dark gray for icons */
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  #footer .footer-about .social-links a:hover {
+    background-color: #ff4a57; /* Hover background color */
+    color: #ffffff; /* White icon color */
+  }
+  
+  #footer .footer-links h4 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  #footer .footer-links ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  #footer .footer-links ul li {
+    margin-bottom: 8px;
+  }
+  
+  #footer .footer-links ul li a {
+    color: #212529; /* Dark gray */
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  #footer .footer-links ul li a:hover {
+    color: #ff4a57; /* Primary theme color */
+  }
+  
+  #footer .footer-newsletter h4 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  #footer .footer-newsletter p {
+    margin-bottom: 15px;
+    color: #495057; /* Medium gray text */
+  }
+  
+  #footer .newsletter-form input[type="email"] {
+    width: calc(100% - 120px);
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  #footer .newsletter-form input[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff4a57; /* Primary theme color */
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  #footer .newsletter-form input[type="submit"]:hover {
+    background-color: #e03e4b; /* Darker hover shade */
+  }
+  
+  #footer .copyright {
+    font-size: 0.9rem;
+    color: #868e96; /* Light gray */
+  }
+  
+  #footer .credits {
+    font-size: 0.8rem;
+    color: #adb5bd; /* Very light gray */
+  }
+  

@@ -1,0 +1,50 @@
+.message-input {
+  background-color: #f9f9f9; /* Light background for input container */
+  padding: 10px 15px; /* Add some padding around the container */
+  border-top: 1px solid #eaeaea; /* Subtle border on top */
+}
+
+.message-input input {
+  flex: 1;
+  height: 40px;
+  font-size: 14px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.message-input input:focus {
+  border-color: #ff4a57; /* Primary theme color on focus */
+  box-shadow: 0 0 5px rgba(255, 74, 87, 0.5); /* Slight shadow for focus */
+}
+
+.message-input button {
+  height: 40px;
+  padding: 0 20px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #ff4a57; /* Primary theme color */
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.message-input button:hover {
+  background-color: #e03e4b; /* Slightly darker shade on hover */
+  box-shadow: 0 2px 10px rgba(224, 62, 75, 0.3); /* Add hover shadow */
+}
+
+.message-input button:disabled {
+  background-color: #eaeaea; /* Light gray for disabled state */
+  color: #bbb;
+  cursor: not-allowed;
+}
+
+.message-input {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Ensure spacing between input and button */
+}

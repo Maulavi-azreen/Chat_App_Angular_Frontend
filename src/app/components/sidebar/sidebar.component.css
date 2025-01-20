@@ -1,0 +1,18 @@
+.sidebar-container {
+    height: 100%;
+    overflow-y: auto;
+  }
+  
+  .list-group-item {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .list-group-item:hover {
+    background-color: #f88557;
+    color: white;
+  }
+  .search-bar input {
+    border-radius: 20px;
+    padding: 10px;
+  }
