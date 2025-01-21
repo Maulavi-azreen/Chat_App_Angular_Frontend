@@ -1,18 +1,23 @@
 <div class="chat-window-container d-flex flex-column p-0">
-  <!-- Navbar -->
-  <app-chat-navbar [selectedContact]="selectedContact"></app-chat-navbar>
-
-  <!-- Chat Messages -->
   <div class="chat-window p-3 flex-grow-1 overflow-auto">
-    <div
-      class="message"
-      *ngFor="let message of messages"
-      [ngClass]="{
-        'sent': message.sender === 'me',
-        'received': message.sender !== 'me'
-      }"
-    >
-      <p>{{ message.text }}</p>
-    </div>
+    <ng-container *ngIf="messages[selectedChat?._id]?.length > 0; else noMessages">
+      <div
+        class="message"
+        *ngFor="let message of messages"
+        [ngClass]="{
+          'sent': message.sender === 'me',
+          'received': message.sender !== 'me'
+        }"
+      >
+        <p>{{ message.content }}</p>
+      </div>
+    </ng-container>
   </div>
+
+  <!-- No Messages Placeholder -->
+  <ng-template #noMessages>
+    <div class="no-messages text-muted text-center">
+      No messages yet. Start the conversation!
+    </div>
+  </ng-template>
 </div>

@@ -19,12 +19,11 @@
       (click)="selectContact(contact)"
     >
       <img
-      src="assets/img/apple-touch-icon.png"
+        [src]="contact.profilePicture || 'assets/img/apple-touch-icon.png'"
         alt="{{ contact.name }}"
         class="rounded-circle me-2"
         style="width: 40px; height: 40px;"
       />
-      <!--  [src]="contact.profilePicture" -->
       <span>{{ contact.name }}</span>
     </li>
   </ul>

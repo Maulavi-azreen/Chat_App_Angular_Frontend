@@ -4,21 +4,39 @@
         <div class="col-lg-4 col-md-6">
           <div class="form-container" data-aos="fade-up">
             <h2 class="text-center">Login</h2>
-            <form>
+            <form (ngSubmit)="onSubmit()">
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                <input 
+                type="email" 
+                class="form-control" 
+                id="email" 
+                placeholder="Enter your email"
+                [(ngModel)]="email"
+                name="email"
+                >
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                <input 
+                type="password" 
+                class="form-control" 
+                id="password" 
+                placeholder="Enter your password"
+                [(ngModel)]="password"
+                name="password"
+                >
               </div>
               <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
+             <!-- Error Message -->
+          <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+            {{ errorMessage }}
+          </div>
            <!-- Login Link -->
            <p class="text-center mt-3">
             Don't have an account?
-            <a routerLink="/login" class="link">SignUp here</a>
+            <a routerLink="/signup" class="link">SignUp here</a>
           </p>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit  } from '@angular/core';
+import { Component, Input} from '@angular/core';
 import { ChatNavbarComponent } from "../chat-navbar/chat-navbar.component";
 
 @Component({
@@ -9,7 +9,8 @@ import { ChatNavbarComponent } from "../chat-navbar/chat-navbar.component";
   styleUrl: './chat-window.component.css'
 })
 export class ChatWindowComponent {
-  @Input() messages: any[] = [];
-  @Input() selectedContact: any;
+  @Input() selectedChat: any; // Chat object to display
+  @Input() messages: any[] = []; // Initialize as an empty array
+
 
 }

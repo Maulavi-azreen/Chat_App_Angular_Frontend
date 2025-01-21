@@ -19,8 +19,10 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     // Listen for route changes
     this.router.events.subscribe(() => {
+      console.log(this.router.url);  // Log current URL
       // Hide navbar and footer on '/chat' route
       this.showLayout = !this.router.url.startsWith('/chat');
+      console.log(this.showLayout);  // Log showLayout status
     });
   }
 }

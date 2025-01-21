@@ -4,15 +4,17 @@
         <div class="col-lg-5 col-md-8">
           <div class="form-container">
             <h2 class="text-center">Create an Account</h2>
-            <form>
+            <form (ngSubmit)="onSubmit()">
               <!-- Full Name -->
               <div class="mb-3">
                 <label for="fullName" class="form-label">Full Name</label>
                 <input
                   type="text"
                   class="form-control"
-                  id="fullName"
+                  id="name"
                   placeholder="Enter your full name"
+                  name="name"
+                  [(ngModel)]="name"
                 />
               </div>
   
@@ -24,6 +26,8 @@
                   class="form-control"
                   id="email"
                   placeholder="Enter your email"
+                  name="email"
+                  [(ngModel)]="email"
                 />
               </div>
   
@@ -35,6 +39,8 @@
                   class="form-control"
                   id="password"
                   placeholder="Create a password"
+                  [(ngModel)]="password"
+                  name="password"
                 />
               </div>
   
@@ -46,8 +52,14 @@
                   class="form-control"
                   id="confirmPassword"
                   placeholder="Re-enter your password"
+                  [(ngModel)]="confirmPassword"
+                name="confirmPassword"
                 />
               </div>
+               <!-- Error Message -->
+            <div *ngIf="errorMessage" class="text-danger">
+              {{ errorMessage }}
+            </div>
   
               <!-- Submit Button -->
               <div class="d-grid">
