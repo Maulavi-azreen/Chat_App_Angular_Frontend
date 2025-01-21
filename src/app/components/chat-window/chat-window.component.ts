@@ -11,6 +11,8 @@ import { ChatNavbarComponent } from "../chat-navbar/chat-navbar.component";
 export class ChatWindowComponent {
   @Input() selectedChat: any; // Chat object to display
   @Input() messages: any[] = []; // Initialize as an empty array
+  @Input() selectedContact: any;
+  
 
 
 }

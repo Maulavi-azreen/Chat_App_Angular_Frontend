@@ -1,9 +1,10 @@
+<app-chat-navbar [selectedContact]="selectedContact"></app-chat-navbar>
 <div class="chat-window-container d-flex flex-column p-0">
   <div class="chat-window p-3 flex-grow-1 overflow-auto">
     <ng-container *ngIf="messages[selectedChat?._id]?.length > 0; else noMessages">
       <div
         class="message"
-        *ngFor="let message of messages"
+        *ngFor="let message of messages[selectedChat?._id]"
         [ngClass]="{
           'sent': message.sender === 'me',
           'received': message.sender !== 'me'

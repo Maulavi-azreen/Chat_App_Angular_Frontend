@@ -14,6 +14,7 @@
       <app-chat-window
       [selectedChat]="selectedChat"
       [messages]="messages[selectedChat?._id] || []"
+      [selectedContact]="selectedContact"
     ></app-chat-window>
     <!-- <app-chat-window [messages]="messages" [currentUserId]="currentUserId"></app-chat-window> -->
 

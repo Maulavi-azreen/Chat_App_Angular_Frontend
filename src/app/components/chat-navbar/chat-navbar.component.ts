@@ -8,5 +8,6 @@ import { Component ,Input} from '@angular/core';
 })
 export class ChatNavbarComponent {
   @Input() selectedContact: any;
+  
 
 }
