@@ -1,64 +1,94 @@
-.chat-container {
-  display: flex;
-  background-color: #f8f9fa; /* Light background color */
-  height: 100vh; /* Full viewport height */
-  margin: 0; /* Remove margins */
-  padding: 0; /* Remove padding */
-  overflow: hidden; /* Prevent horizontal scrollbars */
-}
-
+/* General container for the chat layout */
 .chat-main-container {
   display: flex;
-  flex: 1;
-  height: 100%; /* Full height of the container */
+  flex-direction: column; /* Stack sidebar and chat window vertically on small screens */
+  height: 100vh;
+  background-color: #f8f9fa;
+  overflow: hidden; /* Prevent scrolling on the main container */
 }
 
-.chat-main-container .sidebar {
-  width: 30%; /* Sidebar occupies 30% of the width */
-  height: 100%; /* Full height for sidebar */
-  background-color: #ffffff; /* Sidebar background */
-  border-right: 1px solid #eaeaea; /* Subtle border */
-  padding: 0; /* Remove default padding */
+/* Sidebar styles */
+.sidebar {
+  background-color: #ffffff;
+  border-right: 1px solid #eaeaea;
+  position: relative; /* Required for responsiveness */
 }
 
-.chat-main-container .chat-window {
-  flex: 1; /* Chat window takes remaining space */
-  height: 100%; /* Full height for chat window */
-  background-color: #ffffff; /* Chat window background */
-  overflow-y: auto; /* Enable vertical scrolling */
-  padding: 0; /* Remove default padding */
+/* Chat window container styles */
+.chat-window-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden; /* Prevent main container from scrolling */
 }
 
-.chat-window .message {
-  padding: 10px 15px;
-  margin: 10px;
-  border-radius: 8px;
+/* Chat window - should scroll without affecting the navbar */
+.chat-window {
+  flex-grow: 1;
+  overflow-y: auto; /* Scrollable chat messages */
+  padding: 1rem;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column; /* Align messages vertically */
+  justify-content: flex-end; /* Align to the bottom */
+  position: relative; /* Required for positioning of sticky elements */
 }
 
-.chat-window .sent {
-  text-align: right;
-  background-color: #ff4a57; /* Sent message background color */
-  color: white;
-  margin-left: auto;
-}
-
-.chat-window .received {
-  text-align: left;
-  background-color: #f1f1f1; /* Received message background color */
-}
-
+/* Make the message input sticky at the bottom */
 .message-input {
-  padding: 10px;
-  border-top: 1px solid #eaeaea; /* Subtle border at the top */
-  background-color: #ffffff; /* Match the chat window's background */
-}
-.placeholder-container {
-  height: 100%; /* Make it fill the chat window */
-  text-align: center;
-  color: #6c757d; /* Muted text color */
+  position: sticky;
+  bottom: 0;
+  background-color: #f9f9f9;
+  padding: 10px 15px;
+  border-top: 1px solid #eaeaea;
+  z-index: 10; /* Ensure input is above the chat window */
 }
 
-.placeholder-container img {
-  max-width: 200px;
-  margin-bottom: 20px;
+/* Message styles for each bubble */
+.message {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  word-wrap: break-word; /* Ensure long words break */
+}
+
+/* Sent message styles - Align to the right */
+.message.sent {
+  align-self: flex-end; /* Aligns sent message to the right */
+  text-align: right;
+}
+
+.message.sent .message-bubble {
+  background-color: #f88557;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 80%;
+}
+
+/* Received message styles - Align to the left */
+.message.received {
+  align-self: flex-start; /* Aligns received message to the left */
+  text-align: left;
+}
+
+.message.received .message-bubble {
+  background-color: #c5c4c4;
+  color: black;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 80%;
+}
+
+.message-time {
+  font-size: 0.75rem;
+  margin-top: 5px;
+  color: #999;
+}
+
+/* Placeholder for no messages */
+.no-messages {
+  color: #999;
+  text-align: center;
+  margin-top: 50px; /* Center the text properly */
 }

@@ -1,6 +1,6 @@
 <div class="sidebar-container p-3">
   <!-- Search Bar -->
-  <div class="search-bar mb-3">
+  <div class="search-bar mb-3 d-flex">
     <input
       type="text"
       class="form-control"
@@ -8,6 +8,25 @@
       [(ngModel)]="searchTerm"
       (input)="filterContacts()"
     />
+    <div class="dropdown ms-2">
+      <button
+        class="btn btn-link text-decoration-none p-0"
+        type="button"
+        id="sidebarMenuButton"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <i class="bi bi-three-dots-vertical"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sidebarMenuButton">
+        <li>
+          <button class="dropdown-item" (click)="updateProfile()">Update Profile</button>
+        </li>
+        <li>
+          <button class="dropdown-item text-danger" (click)="logout()">Logout</button>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <!-- Contact List -->

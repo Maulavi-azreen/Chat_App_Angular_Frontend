@@ -1,37 +1,44 @@
-<div class="container-fluid chat-main-container d-flex">
+<div class="container-fluid chat-main-container d-flex flex-column flex-md-row">
   <!-- Sidebar -->
-  <div class="sidebar col-md-4 border-end">
+  <div class="sidebar col-12 col-md-4 border-end p-0">
     <app-sidebar
-    [contacts]="contacts"
-    (contactSelected)="onContactSelected($event)"
-  ></app-sidebar>
+      [contacts]="contacts"
+      [currentUser]="currentUser"
+      (contactSelected)="onContactSelected($event)"
+    ></app-sidebar>
   </div>
 
   <!-- Chat Window -->
-  <div class="chat-window col-md-8">
+  <div class="chat-window col-12 col-md-8 d-flex flex-column">
+    <!-- Show Placeholder if No Contact is Selected -->
     <ng-container *ngIf="selectedContact; else placeholder">
-      <!-- Chat Window -->
-      <app-chat-window
-      [selectedChat]="selectedChat"
-      [messages]="messages[selectedChat?._id] || []"
-      [selectedContact]="selectedContact"
-    ></app-chat-window>
-    <!-- <app-chat-window [messages]="messages" [currentUserId]="currentUserId"></app-chat-window> -->
+      <!-- Navbar -->
+      <div class="chat-navbar">
+        <app-chat-navbar [selectedContact]="selectedContact"></app-chat-navbar>
+      </div>
 
-    
+      <!-- Scrollable Messages -->
+      <div class="messages-container flex-grow-1 overflow-auto">
+        <app-chat-window
+          [selectedChat]="selectedChat"
+          [currentUser]="currentUser"
+          [messages]="messages"
+          [selectedContact]="selectedContact"
+        ></app-chat-window>
+      </div>
 
       <!-- Message Input -->
-      <app-message-input
-      [selectedContact]="selectedContact"
-      (messageSent)="onMessageSent($event)"
-    ></app-message-input>
+      <div class="message-input-container">
+        <app-message-input
+          [selectedContact]="selectedContact"
+          (messageSent)="onMessageSent($event)"
+        ></app-message-input>
+      </div>
     </ng-container>
 
-    <!-- Placeholder -->
+    <!-- Placeholder Template -->
     <ng-template #placeholder>
-      <div
-        class="placeholder-container d-flex flex-column justify-content-center align-items-center h-100 mt-5"
-      >
+      <div class="placeholder-container d-flex flex-column justify-content-center align-items-center h-100">
         <img
           src="assets/img/start-img.jpg"
           alt="Chat Illustration"

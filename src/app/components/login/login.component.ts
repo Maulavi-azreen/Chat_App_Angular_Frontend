@@ -27,6 +27,12 @@ export class LoginComponent {
       (response) => {
         // Store token in localStorage or session
         localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify({
+          _id: response._id,
+          name: response.name,
+          // email: response.email,
+          // profilePic: response.profilePic,
+        }));
 
         // Redirect to dashboard or another page
         this.router.navigate(['/chat']);

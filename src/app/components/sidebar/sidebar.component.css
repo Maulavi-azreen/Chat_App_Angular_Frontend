@@ -1,18 +1,27 @@
+/* Sidebar Container */
 .sidebar-container {
-    height: 100%;
-    overflow-y: auto;
-  }
-  
-  .list-group-item {
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .list-group-item:hover {
-    background-color: #f88557;
-    color: white;
-  }
-  .search-bar input {
-    border-radius: 20px;
-    padding: 10px;
-  }
+  background-color: #ffffff;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+/* Search Bar */
+.search-bar input {
+  font-size: 1rem;
+  border-radius: 25px;
+}
+
+.search-bar .dropdown-menu {
+  min-width: 150px;
+}
+
+.list-group-item {
+  cursor: pointer;
+  padding: 10px 15px;
+  transition: background-color 0.2s ease;
+}
+
+.list-group-item:hover {
+  background-color: #f0f0f0;
+}

@@ -6,7 +6,10 @@
   .navbar-brand {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #ff4a57;
+    color: #f88557;
+  }
+  .navbar-brand:hover{
+    color: #6e3722;
   }
   
   /* Navbar Links Styling */
@@ -16,13 +19,13 @@
   }
   
   .nav-link:hover {
-    color: #ff4a57 !important;
+    color: #f88557 !important;
     text-decoration: none;
   }
   
   /* "Get Started" Button Styling */
   .btn-get-started {
-    background-color: #ff4a57 !important;
+    background-color: #f88557 !important;
     color: white !important;
     padding: 8px 20px;
     border-radius: 5px;

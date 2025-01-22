@@ -22,4 +22,21 @@ export class MessageService {
    getMessages(chatId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${chatId}`);
   }
+
+  // Edit a message
+  editMessage(messageId: string, content: string): Observable<any> {
+    if (!messageId || !content) {
+      throw new Error('MessageId and content are required');
+    }
+    return this.http.put(`${this.apiUrl}/edit/${messageId}`, { content });
+  }
+
+  // Delete a message
+  deleteMessage(chatId: string, messageId: string): Observable<any> {
+    if (!chatId || !messageId) {
+      throw new Error('ChatId and messageId are required');
+    }
+    return this.http.put(`${this.apiUrl}/delete/${chatId}/${messageId}`, {});
+  }
 }
+

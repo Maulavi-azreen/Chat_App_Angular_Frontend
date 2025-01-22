@@ -19,7 +19,7 @@
   }
   
   .btn-get-started {
-    background-color: #ff4a57 !important;
+    background-color: #f88557 !important;
     color: white !important;
     padding: 10px 20px;
     border-radius: 5px;
@@ -41,7 +41,7 @@
   }
   
   .btn-watch:hover {
-    color: #ff4a57;
+    color: #f88557;
     text-decoration: none;
   }
   

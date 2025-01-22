@@ -1,16 +1,59 @@
-<app-chat-navbar [selectedContact]="selectedContact"></app-chat-navbar>
 <div class="chat-window-container d-flex flex-column p-0">
-  <div class="chat-window p-3 flex-grow-1 overflow-auto">
-    <ng-container *ngIf="messages[selectedChat?._id]?.length > 0; else noMessages">
+  <div class="chat-window flex-grow-1 overflow-auto" #chatWindow>
+    <ng-container
+      *ngIf="selectedChat && (messages[selectedChat._id]?.length || 0) > 0; else noMessages"
+    >
       <div
         class="message"
-        *ngFor="let message of messages[selectedChat?._id]"
+        *ngFor="let message of messages[selectedChat._id]"
         [ngClass]="{
-          'sent': message.sender === 'me',
-          'received': message.sender !== 'me'
+          sent: message.sender?._id === currentUser?._id,
+          received: message.sender?._id !== currentUser?._id
         }"
       >
-        <p>{{ message.content }}</p>
+        <!-- Message Row -->
+        <div class="message-row d-flex align-items-center">
+          <!-- For sent messages -->
+          <ng-container *ngIf="message.sender?._id === currentUser?._id">
+            <div
+              class="message-options"
+              (click)="toggleMessageMenu(message._id)"
+            >
+              <i class="bi bi-three-dots-vertical"></i>
+            </div>
+          </ng-container>
+
+          <!-- Message Bubble -->
+          <div class="message-bubble d-flex">
+            {{ message.content }}
+          </div>
+
+          <!-- For received messages -->
+          <ng-container *ngIf="message.sender?._id !== currentUser?._id">
+            <div
+              class="message-options"
+              (click)="toggleMessageMenu(message._id)"
+            >
+              <i class="bi bi-three-dots-vertical"></i>
+            </div>
+          </ng-container>
+        </div>
+        <div class="message-time">{{ message.createdAt | date : "short" }}</div>
+
+        <!-- Dropdown Menu -->
+        <div
+          class="message-menu"
+          *ngIf="messageMenuOpen === message._id"
+        >
+          <ul class="dropdown-menu">
+            <li (click)="onEditMessage(message)">
+              <i class="bi bi-pencil"></i> Edit
+            </li>
+            <li (click)="onDeleteMessage(message)">
+              <i class="bi bi-trash"></i> Delete
+            </li>
+          </ul>
+        </div>
       </div>
     </ng-container>
   </div>
