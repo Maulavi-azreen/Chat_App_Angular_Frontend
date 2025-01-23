@@ -17,22 +17,15 @@ export class SidebarComponent {
   searchTerm: string = ''; // For search functionality
   filteredContacts: any[] = []; // For displaying filtered users
 
+
   constructor(private router: Router) {}
 
   ngOnChanges(): void {
     this.filterContacts();
   }
 
-  // Filter contacts based on the search term
-  // filterContacts(): void {
-  //   if (this.searchTerm.trim()) {
-  //     this.filteredContacts = this.contacts.filter((contact) =>
-  //       contact.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-  //     );
-  //   } else {
-  //     this.filteredContacts = this.contacts;
-  //   }
-  // }
+
+
   filterContacts(): void {
     this.filteredContacts = this.contacts.filter(
       (contact) =>
@@ -49,7 +42,6 @@ export class SidebarComponent {
   // Navigate to update profile page
   updateProfile(): void {
     console.log('Navigating to Update Profile');
-    this.router.navigate(['/update-profile']); // Replace with the actual route
   }
 
   // Logout user and redirect to login page
@@ -57,5 +49,10 @@ export class SidebarComponent {
     localStorage.removeItem('token'); // Clear token
     console.log('Logged out successfully.');
     this.router.navigate(['/login']); // Replace with the actual login route
+  }
+
+  createGroup() {
+    // Logic for creating a group
+    console.log("Create group clicked");
   }
 }

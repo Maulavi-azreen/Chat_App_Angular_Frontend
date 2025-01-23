@@ -7,25 +7,14 @@
   overflow: hidden;
 }
 
-/* .chat-window {
+.chat-window {
   flex-grow: 1;
-  overflow-y: auto; 
-  position: relative; 
+  overflow-y: auto; /* Enable scrolling for messages */
+  position: relative; /* Ensure dropdown menu positioning works */
   padding: 1rem;
   background-color: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; 
-} */
-.chat-window {
-  flex-grow: 1;
-  overflow-y: auto; /* Keep messages scrollable */
-  position: relative; /* Ensures child elements can position themselves properly */
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-
 }
 
 /* Individual Message Styles */
@@ -79,45 +68,73 @@
   font-size: 1.25rem;
 }
 
-/* Options Icon */
-.message-options {
-  cursor: pointer;
+
+/* Style for the message action buttons */
+.message-options button {
+  color: black; /* Set text color to black */
+  background-color: transparent; /* No background color, to keep it flat */
+  border: none; /* Remove border */
+  padding: 5px 10px; /* Add padding for better spacing */
+  font-size: 16px; /* Set a consistent font size */
+  display: inline-flex; /* Align the icon properly */
+  align-items: center; /* Center the icon */
+  transition: color 0.3s ease, transform 0.2s ease; /* Smooth color and transform transition */
+}
+
+/* On hover, change color and add scale effect */
+.message-options button:hover {
+  color: #000; /* Ensure the text is black on hover */
+  transform: scale(1.1); /* Slightly enlarge the icon on hover */
+}
+
+/* Optional: Add a focus style for accessibility */
+.message-options button:focus {
+  outline: none; /* Remove the default focus outline */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Custom focus style */
+}
+
+/* Adjust message bubble padding for readability */
+.message-bubble {
+  padding: 12px 18px;
   position: relative;
+  padding-bottom: 25px; /* Space for reactions */
+  /* max-width: 75%; */
 }
 
-/* Dropdown Menu */
-.message-menu {
-  position: absolute;
-  top: 35px; /* Adjust for spacing below the dots */
-  left: 0; /* Align with the dots */
-  z-index: 10; /* Ensure it appears above other elements */
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  min-width: 150px;
+/* Time Styling */
+.message-time {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-top: 5px;
 }
 
-/* Align the dropdown relative to its parent */
-.message-options {
-  position: relative;
+.replied-message {
+  border-left: 4px solid #007bff;
+  padding-left: 8px;
+  font-size: 0.9rem;
 }
 
-/* Menu Items */
-.message-menu .dropdown-menu {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.replied-content {
+  font-style: italic;
+  color: #007bff;
 }
 
-.message-menu li {
-  padding: 8px 12px;
-  cursor: pointer;
+.reply-preview {
+  border-left: 4px solid #28a745;
+  padding: 8px;
+  background-color: #f8f9fa;
+}
+.reactions {
+  font-size: 0.9rem; /* Smaller emoji size */
   display: flex;
-  align-items: center;
-  gap: 8px;
+  bottom: -15px; /* Slightly lower the reactions */
+  right: 0;
+
 }
 
-.message-menu li:hover {
-  background-color: #f1f1f1;
+.reaction-emoji {
+  font-size: 1rem; /* Adjust emoji size */
+  padding: 2px 6px;
+  background: transparent; /* Light background to make it visible */
+  
 }

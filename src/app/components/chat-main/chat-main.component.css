@@ -1,4 +1,4 @@
-/* General container for the chat layout */
+General container for the chat layout
 .chat-main-container {
   display: flex;
   flex-direction: column; /* Stack sidebar and chat window vertically on small screens */
@@ -35,7 +35,7 @@
 }
 
 /* Make the message input sticky at the bottom */
-.message-input {
+.message-input-container {
   position: sticky;
   bottom: 0;
   background-color: #f9f9f9;
@@ -44,51 +44,11 @@
   z-index: 10; /* Ensure input is above the chat window */
 }
 
-/* Message styles for each bubble */
-.message {
+/* Placeholder for no messages */
+.placeholder-container {
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
-  word-wrap: break-word; /* Ensure long words break */
-}
-
-/* Sent message styles - Align to the right */
-.message.sent {
-  align-self: flex-end; /* Aligns sent message to the right */
-  text-align: right;
-}
-
-.message.sent .message-bubble {
-  background-color: #f88557;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 20px;
-  max-width: 80%;
-}
-
-/* Received message styles - Align to the left */
-.message.received {
-  align-self: flex-start; /* Aligns received message to the left */
-  text-align: left;
-}
-
-.message.received .message-bubble {
-  background-color: #c5c4c4;
-  color: black;
-  padding: 10px 15px;
-  border-radius: 20px;
-  max-width: 80%;
-}
-
-.message-time {
-  font-size: 0.75rem;
-  margin-top: 5px;
-  color: #999;
-}
-
-/* Placeholder for no messages */
-.no-messages {
-  color: #999;
-  text-align: center;
-  margin-top: 50px; /* Center the text properly */
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }

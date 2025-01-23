@@ -1,17 +1,33 @@
 <div class="message-input d-flex align-items-center">
-  <input
-    type="text"
-    class="form-control me-2"
-    placeholder="Type your message..."
-    [(ngModel)]="messageText"
-    [disabled]="!selectedContact"
-    name="message"
-  />
+  <!-- Replied Message Preview -->
+  <div *ngIf="repliedMessage" class="reply-preview">
+    <div class="replied-content">
+      Replying to: "{{ repliedMessage.content }}"
+    </div>
+    <button (click)="cancelReply()" class="btn btn-sm btn-danger">
+      Cancel
+    </button>
+  </div>
+  <textarea
+  [(ngModel)]="messageText"
+  [placeholder]="editedMessage ? 'Edit your message...' : 'Type a message...'"
+  (keydown.enter)="sendMessage()"
+  rows="3"
+  class="form-control">
+  </textarea>
+  <!-- Cancel Button: Only show if in edit mode -->
+  <button *ngIf="editedMessage" (click)="cancelEdit()" class="btn btn-secondary">
+    Cancel
+  </button>
   <button
     class="btn btn-primary"
     (click)="sendMessage()"
     [disabled]="!messageText || !selectedContact"
   >
-    Send
+  {{ editedMessage ? 'Update' : 'Send' }}
   </button>
+   <!-- Error Message -->
+   <!-- <div *ngIf="messageError" class="alert alert-danger mt-2">
+    {{ messageError }}
+  </div> -->
 </div>

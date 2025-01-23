@@ -39,6 +39,11 @@ export class ChatMainComponent implements OnInit {
   // Store logged-in user details
   currentUser: any; 
 
+  // Track edited message
+  editedMessage: any = null;
+  repliedMessage: any = null;
+  editedMessageText: any = null;
+
   constructor(
     private userService: UserService,
     private chatService: ChatService,
@@ -169,7 +174,7 @@ export class ChatMainComponent implements OnInit {
   }
 
 
-  // Handle message sent
+  // Handle message sent for new msg and edited msg
   onMessageSent(newMessage: any): void {
     if (this.selectedContact) {
       const chatId = this.selectedContact.chatId;
@@ -177,14 +182,29 @@ export class ChatMainComponent implements OnInit {
       if (!this.messages[chatId]) {
         this.messages[chatId] = [];
       }
-      this.messages[chatId].push(newMessage); // Add the new message to the chat
+      this.messages[chatId].push(newMessage);
+      this.editedMessageText = ''; // Clear edit mode after sending
+      this.resetReplyState();  //Reset reply state
       console.log('Updated messages for chat:', this.messages[chatId]);
-      console.log(
-        'Message sent to',
-        this.selectedContact.name,
-        ':',
-        newMessage
-      );
     }
   }
+  onMessageError(errorMessage: string): void {
+    console.error('Message Error:', errorMessage);
+    // You can also show a toast or an alert with the error message here
+  }
+
+onEditMessage(message: any): void {
+  this.editedMessage = message;  // Store message to edit
+  this.editedMessageText = message.content;  // Pass content to input
+}
+
+onReplyMessage(message: any): void {
+  this.repliedMessage = message;  // Store message to reply
+}
+
+
+resetReplyState(): void {
+  this.editedMessage = null;
+  this.editedMessageText = null;
+}
 }

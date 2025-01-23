@@ -22,6 +22,10 @@ export class MessageService {
    getMessages(chatId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${chatId}`);
   }
+  // Fetch message by ID
+  getMessageById(messageId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${messageId}`);
+  }
 
   // Edit a message
   editMessage(messageId: string, content: string): Observable<any> {
@@ -36,7 +40,23 @@ export class MessageService {
     if (!chatId || !messageId) {
       throw new Error('ChatId and messageId are required');
     }
-    return this.http.put(`${this.apiUrl}/delete/${chatId}/${messageId}`, {});
+    return this.http.delete(`${this.apiUrl}/delete/${chatId}/${messageId}`, {});
+  }
+
+  // Reply to a message
+  replyToMessage(messageId: string, content: string, chatId: string): Observable<any> {
+    if (!messageId || !content || !chatId) {
+      throw new Error('MessageId, content, and chatId are required');
+    }
+    return this.http.post(`${this.apiUrl}/reply/${messageId}`, { content, chatId });
+  }
+
+  // React to a message
+  reactToMessage(messageId: string, emoji: string): Observable<any> {
+    if (!messageId || !emoji) {
+      throw new Error('MessageId and emoji are required');
+    }
+    return this.http.post(`${this.apiUrl}/react/${messageId}`, { emoji });
   }
 }
 

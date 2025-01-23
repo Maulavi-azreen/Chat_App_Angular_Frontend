@@ -1,7 +1,10 @@
 <div class="chat-window-container d-flex flex-column p-0">
   <div class="chat-window flex-grow-1 overflow-auto" #chatWindow>
     <ng-container
-      *ngIf="selectedChat && (messages[selectedChat._id]?.length || 0) > 0; else noMessages"
+      *ngIf="
+        selectedChat && (messages[selectedChat._id]?.length || 0) > 0;
+        else noMessages
+      "
     >
       <div
         class="message"
@@ -13,46 +16,78 @@
       >
         <!-- Message Row -->
         <div class="message-row d-flex align-items-center">
-          <!-- For sent messages -->
-          <ng-container *ngIf="message.sender?._id === currentUser?._id">
-            <div
-              class="message-options"
-              (click)="toggleMessageMenu(message._id)"
-            >
-              <i class="bi bi-three-dots-vertical"></i>
+          <!-- Show replied message if available -->
+          <div
+            *ngIf="message.replyTo"
+            class="replied-message border rounded p-2 mb-1 bg-light me-2"
+          >
+            <small class="text-muted">Replied to:</small>
+            <div class="replied-content text-truncate fw-bold text-primary">
+              <!-- {{ message.replyTo?.content || 'Reply unavailable' }} -->
+              {{ message.replyTo.content }}
             </div>
-          </ng-container>
-
+          </div>
           <!-- Message Bubble -->
           <div class="message-bubble d-flex">
-            {{ message.content }}
-          </div>
-
-          <!-- For received messages -->
-          <ng-container *ngIf="message.sender?._id !== currentUser?._id">
-            <div
-              class="message-options"
-              (click)="toggleMessageMenu(message._id)"
-            >
-              <i class="bi bi-three-dots-vertical"></i>
+            <!-- Display replied message with styling -->
+            <!-- Main Message Content -->
+            <div class="message-text">
+              {{ message.content }}
             </div>
-          </ng-container>
+             <!-- Reactions Display -->
+             <div *ngIf="message.reactions?.length > 0" class="reactions position-absolute end-0">
+              <span 
+                *ngFor="let reaction of message.reactions" 
+                class="reaction-emoji"
+              >
+                {{ reaction.emoji }}
+              </span>
+            </div>
+          </div>
         </div>
-        <div class="message-time">{{ message.createdAt | date : "short" }}</div>
 
-        <!-- Dropdown Menu -->
-        <div
-          class="message-menu"
-          *ngIf="messageMenuOpen === message._id"
-        >
-          <ul class="dropdown-menu">
-            <li (click)="onEditMessage(message)">
-              <i class="bi bi-pencil"></i> Edit
-            </li>
-            <li (click)="onDeleteMessage(message)">
-              <i class="bi bi-trash"></i> Delete
-            </li>
-          </ul>
+        <!-- Icons below message -->
+        <div class="message-options d-flex justify-content-start mt-2">
+          <!-- Edit Icon (Only for sent messages) -->
+          <button
+            (click)="onEditMessage(message)"
+            class="btn btn-link"
+            title="Edit"
+            [disabled]="message.sender?._id !== currentUser?._id"
+          >
+            <i class="bi bi-pencil"></i>
+          </button>
+
+          <!-- Delete Icon (Only for sent messages) -->
+          <button
+            (click)="confirmDeleteMessage(message)"
+            class="btn btn-link"
+            title="Delete"
+            [disabled]="message.sender?._id !== currentUser?._id"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+          <!-- Reply Icon -->
+          <button
+            (click)="onReplyMessage(message)"
+            class="btn btn-link"
+            title="Reply"
+          >
+            <i class="bi bi-arrow-return-right"></i>
+          </button>
+          <!-- React -->
+          <button
+            (click)="onReactMessage(message)"
+            class="btn btn-link"
+            title="React"
+          >
+            <i class="bi bi-emoji-smile"></i>
+          </button>
+        </div>
+
+        <!-- Message Time -->
+        <div class="message-time text-muted mt-1">
+          {{ message.createdAt | date : "short" }}
         </div>
       </div>
     </ng-container>

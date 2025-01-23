@@ -24,6 +24,8 @@
           [currentUser]="currentUser"
           [messages]="messages"
           [selectedContact]="selectedContact"
+          (editMessage)="onEditMessage($event)"
+          (replyMessage)="onReplyMessage($event)"
         ></app-chat-window>
       </div>
 
@@ -31,7 +33,10 @@
       <div class="message-input-container">
         <app-message-input
           [selectedContact]="selectedContact"
+          [editedMessage]="editedMessage"
+          [repliedMessage]="repliedMessage"
           (messageSent)="onMessageSent($event)"
+          (messageError)="onMessageError($event)"
         ></app-message-input>
       </div>
     </ng-container>
