@@ -15,4 +15,16 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/getAllUsers`);
   }
 
+  sendOtp(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/otp-generate`, { email });
+  }
+
+  verifyOtp(email: string, otp: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/verify-otp`, { email, otp });
+  }
+
+  resetPassword(email: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password`, { email, newPassword });
+  }
+
 }

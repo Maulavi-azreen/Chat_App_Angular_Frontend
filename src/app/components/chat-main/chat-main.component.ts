@@ -44,6 +44,10 @@ export class ChatMainComponent implements OnInit {
   repliedMessage: any = null;
   editedMessageText: any = null;
 
+  groups: any[] = []; // Filtered group chats to be passed to Sidebar
+
+  selectedGroup: any = null;  // Track selected group chat
+
   constructor(
     private userService: UserService,
     private chatService: ChatService,
@@ -105,6 +109,8 @@ export class ChatMainComponent implements OnInit {
     this.chatService.fetchChats().subscribe({
       next: (chats) => {
         this.chats = chats;
+        // Filter out group chats
+      this.groups = chats.filter(chat => chat.isGroupChat);
         chats.forEach((chat) => {
           if (!this.messages[chat._id]) {
             this.messages[chat._id] = []; // Initialize messages array for each chat
@@ -153,6 +159,16 @@ export class ChatMainComponent implements OnInit {
       );
       this.loadMessages(contact.chatId);
     }
+  }
+
+   // Handle group selection
+   onGroupSelected(group: any): void {
+    this.selectedGroup = group; // Set the selected group
+
+    // Set selected chat to group chat
+    this.selectedChat = group;
+
+    this.loadMessages(group._id); // Load messages for selected group chat
   }
 
   // Load the messages

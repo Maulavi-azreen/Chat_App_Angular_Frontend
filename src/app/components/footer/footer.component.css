@@ -13,7 +13,7 @@
   #footer .footer-about .logo .sitename {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #ff4a57; /* Primary theme color */
+    color: #f88557; /* Primary theme color */
   }
   
   #footer .footer-about .social-links a {
@@ -30,7 +30,7 @@
   }
   
   #footer .footer-about .social-links a:hover {
-    background-color: #ff4a57; /* Hover background color */
+    background-color: #f88557; /* Hover background color */
     color: #ffffff; /* White icon color */
   }
   
@@ -56,13 +56,16 @@
   }
   
   #footer .footer-links ul li a:hover {
-    color: #ff4a57; /* Primary theme color */
+    color: #f88557; /* Primary theme color */
   }
   
   #footer .footer-newsletter h4 {
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 10px;
+  }
+  #footer .footer-newsletter button {
+   background-color: #f88557;
   }
   
   #footer .footer-newsletter p {
@@ -82,7 +85,7 @@
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-color: #ff4a57; /* Primary theme color */
+    background-color: #f88557; /* Primary theme color */
     color: white;
     font-weight: bold;
     cursor: pointer;
@@ -90,7 +93,7 @@
   }
   
   #footer .newsletter-form input[type="submit"]:hover {
-    background-color: #e03e4b; /* Darker hover shade */
+    background-color: #f88557; /* Darker hover shade */
   }
   
   #footer .copyright {

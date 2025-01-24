@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -19,9 +19,23 @@ export class ChatService {
   }
   
 
-  // Fetch Chats
+  // Fetch all chats (both group and individual) for the logged-in user
   fetchChats(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any[]>(`${this.apiUrl}/fetch-chats`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`, // Ensure you're passing the correct token
+      },
+    });
+  }
+
+   // Create Group Chat
+   createGroup(users: string[], chatName: string): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const body = {
+      users: JSON.stringify(users),
+      chatName: chatName,
+    };
+    return this.http.post(`${this.apiUrl}/group`, body, { headers });
   }
 
   

@@ -1,17 +1,21 @@
 <div class="sidebar-container p-3">
-  <!-- Search Bar -->
-  <div class="search-bar mb-3 d-flex align-items-center justify-content-between">
+  <div class="container d-flex mb-3">
     <!-- Avatar with profile update option -->
     <div class="me-3" (click)="updateProfile()">
-      <img 
-        src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" 
-        class="rounded-circle" 
-        style="width: 50px; height: 50px;" 
-        alt="Avatar" 
+      <img
+        src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+        class="rounded-circle"
+        style="width: 50px; height: 50px;"
+        alt="Avatar"
       />
     </div>
+    <div class="me-3 mt-2">
+      <h4>Hello {{ currentUser.name }}</h4>
+    </div>
+  </div>
 
-    <!-- Search Input -->
+  <!-- Search Bar -->
+  <div class="search-bar mb-3 d-flex align-items-center justify-content-between">
     <div class="flex-grow-1">
       <input
         type="text"
@@ -21,8 +25,6 @@
         (input)="filterContacts()"
       />
     </div>
-
-    <!-- Logout Button -->
     <div class="ms-3">
       <button class="btn btn-link text-danger p-0" (click)="logout()">
         Logout
@@ -32,13 +34,47 @@
 
   <!-- Contact List -->
   <h4 class="mb-3 d-flex justify-content-between align-items-center">
-    Contacts
-    <!-- Create Group Icon -->
+    Lists
     <span class="ms-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Create a Group">
-      <i class="bi bi-person-plus-fill fs-4 cursor-pointer" (click)="createGroup()"></i>
+      <i
+        class="bi bi-person-plus-fill fs-4 cursor-pointer me-2"
+        (click)="createGroupMode()"
+      ></i>
+      <i
+        *ngIf="showArrow"
+        class="bi bi-arrow-right-circle-fill fs-4 cursor-pointer"
+        (click)="createGroup()"
+        style="visibility: visible;"
+      ></i>
     </span>
   </h4>
-  
+
+<!-- Display Group Chats or "Create a Group" message -->
+<h4 class="mb-3">Groups</h4>
+<div *ngIf="groups.length === 0" class="text-center text-muted d-flex">
+  <p>No groups available. <span class=" text-primary me-3" (click)="createGroupMode()">Create a Group</span></p>
+  <i class="bi bi-person-plus-fill fs-5 text-dark" (click)="createGroupMode()"></i>
+</div>
+<ul *ngIf="groups.length > 0" class="list-group">
+  <li
+    class="list-group-item d-flex align-items-center"
+    *ngFor="let group of groups"
+    (click)="selectGroup(group)"
+  >
+    <img
+      src="assets/img/apple-touch-icon.png"
+      alt="Group Avatar"
+      class="rounded-circle me-2"
+      style="width: 40px; height: 40px;"
+    />
+    <span>{{ group.chatName }}</span>
+  </li>
+</ul>
+
+  <!-- Contact List -->
+  <h4 class="mb-3 d-flex justify-content-between align-items-center">
+    Contacts
+  </h4>
   <ul class="list-group">
     <li
       class="list-group-item d-flex align-items-center"

@@ -4,7 +4,9 @@
     <app-sidebar
       [contacts]="contacts"
       [currentUser]="currentUser"
+      [groups]="groups"
       (contactSelected)="onContactSelected($event)"
+      (groupSelected)="onGroupSelected($event)"
     ></app-sidebar>
   </div>
 
