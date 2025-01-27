@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #f8f9fa;
+  background-color: #F4F7FC;
   overflow: hidden;
 }
 
@@ -12,7 +12,7 @@
   overflow-y: auto; /* Enable scrolling for messages */
   position: relative; /* Ensure dropdown menu positioning works */
   padding: 1rem;
-  background-color: #fff;
+  background-color: #ECF0F1;
   display: flex;
   flex-direction: column;
 }
@@ -32,7 +32,7 @@
 }
 
 .message.sent .message-bubble {
-  background-color: #f88557;
+  background-color: #3498DB;
   color: white;
   padding: 10px 15px;
   border-radius: 20px;
@@ -47,8 +47,8 @@
 }
 
 .message.received .message-bubble {
-  background-color: #c5c4c4;
-  color: black;
+  background-color: #BDC3C7;
+  color: #0f151b;
   padding: 10px 15px;
   border-radius: 20px;
   max-width: 100%;
@@ -109,18 +109,18 @@
 }
 
 .replied-message {
-  border-left: 4px solid #007bff;
+  border-left: 4px solid #0b131b;
   padding-left: 8px;
   font-size: 0.9rem;
 }
 
 .replied-content {
   font-style: italic;
-  color: #007bff;
+  color: #0c121a;
 }
 
 .reply-preview {
-  border-left: 4px solid #28a745;
+  border-left: 4px solid #27AE60;
   padding: 8px;
   background-color: #f8f9fa;
 }

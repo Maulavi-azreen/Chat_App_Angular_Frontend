@@ -1,10 +1,10 @@
 /* Chat Navbar Styling */
 .chat-navbar {
-  background-color: #ffffff;
   position: sticky;
   top: 0; /* Stick to the top of the page */
   z-index: 10; /* Ensure it's on top of other content */
-  background-color: #f8f9fa;
+  background-color: #2C3E50;
+  color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 

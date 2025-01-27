@@ -1,8 +1,7 @@
 /* Sidebar Container */
-.sidebar-container {
-  background-color: #ffffff;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  max-height: 100%;
+.sidebar{
+  background-color: #ECF0F1;
+  height: 100vh;
   overflow-y: auto;
 }
 
@@ -17,13 +16,16 @@
 }
 
 .list-group-item {
+  background-color: #2C3E50;
+  color: white;
   cursor: pointer;
   padding: 10px 15px;
   transition: background-color 0.2s ease;
 }
 
 .list-group-item:hover {
-  background-color: #f0f0f0;
+  background-color: #10171f;
+  color: white;
 }
 
 .selected {

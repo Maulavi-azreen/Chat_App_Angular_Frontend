@@ -1,9 +1,8 @@
-General container for the chat layout
+/* General container for the chat layout */
 .chat-main-container {
   display: flex;
   flex-direction: column; /* Stack sidebar and chat window vertically on small screens */
   height: 100vh;
-  background-color: #f8f9fa;
   overflow: hidden; /* Prevent scrolling on the main container */
 }
 
@@ -26,21 +25,20 @@ General container for the chat layout
 .chat-window {
   flex-grow: 1;
   overflow-y: auto; /* Scrollable chat messages */
-  padding: 1rem;
   background-color: #fff;
   display: flex;
   flex-direction: column; /* Align messages vertically */
   justify-content: flex-end; /* Align to the bottom */
   position: relative; /* Required for positioning of sticky elements */
+  width: 68%; /* Ensure it takes full available width */
+  padding: 0 10px 0px 10px; /* Adjust padding if necessary */
+  margin: 0; /* Remove any unwanted margins */
 }
 
 /* Make the message input sticky at the bottom */
 .message-input-container {
   position: sticky;
   bottom: 0;
-  background-color: #f9f9f9;
-  padding: 10px 15px;
-  border-top: 1px solid #eaeaea;
   z-index: 10; /* Ensure input is above the chat window */
 }
 
