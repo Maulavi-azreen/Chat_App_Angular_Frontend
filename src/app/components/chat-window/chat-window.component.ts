@@ -47,7 +47,13 @@ export class ChatWindowComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // if (changes['selectedChat'] && this.selectedChat) {
+    //   this.joinChat();
+    // }
     if (changes['selectedChat'] && this.selectedChat) {
+      if (this.selectedChat?.isGroupChat || this.selectedChat?.participants) {
+        console.log('Group chat detected');
+      }
       this.joinChat();
     }
   }
@@ -57,9 +63,10 @@ export class ChatWindowComponent implements OnInit, OnChanges {
     this.scrollToBottom();
   }
 
-  // Join a specific chat (room) based on selected chat ID
+  // Joining a group chat or one-on-one chat
   private joinChat(): void {
     if (this.selectedChat?._id) {
+      console.log(`Joining chat ID: ${this.selectedChat._id}`);
       this.socket.emit('join_chat', this.selectedChat._id);
     }
   }
@@ -80,32 +87,77 @@ export class ChatWindowComponent implements OnInit, OnChanges {
   }
 
   // Function to send a message
-  sendMessage(): void {
+  // sendMessage(): void {
+  //   if (this.selectedChat && this.messageText.trim() !== '') {
+  //     const message = {
+  //       chatId: this.selectedChat._id,
+  //       senderId: this.currentUser._id,
+  //       content: this.messageText,
+  //       createdAt: new Date(),
+  //       repliedTo: this.replyText ? { _id: this.messageBeingRepliedTo._id, content: this.messageBeingRepliedTo.content } : null,
+  //     };
+
+  //     // If a message is being edited, update it, otherwise send a new message
+  //     if (this.messageBeingEdited) {
+  //       // Update existing message
+  //       this.messageService.editMessage(this.messageBeingEdited._id, this.messageText).subscribe(
+  //         (response) => {
+  //           console.log('Message edited:', response);
+            
+  //           // Find the message in the array and update it
+  //           const updatedMessage = this.messages[this.selectedChat._id].find(
+  //             (msg) => msg._id === this.messageBeingEdited._id
+  //           );
+  //           if (updatedMessage) {
+  //             updatedMessage.content = `${this.messageText} (Edited)`;
+  //           }
+  
+  //           // Reset the edit state
+  //           this.resetEditState();
+  //         },
+  //         (error) => {
+  //           console.error('Error editing message:', error);
+  //         }
+  //       );
+  //     } else {
+  //       // Emit the message to the server to broadcast to other users in the chat
+  //       this.socket.emit('send_message', message);
+
+  //       // Immediately add the message to the local message list to update the UI
+  //       if (!this.messages[message.chatId]) {
+  //         this.messages[message.chatId] = [];
+  //       }
+  //       this.messages[message.chatId].push(message);
+  //     }
+
+  //     // Clear the input field after sending
+  //     this.messageText = '';
+  //   }
+  // }
+
+   // Function to send a message in both individual and group chats
+   sendMessage(): void {
     if (this.selectedChat && this.messageText.trim() !== '') {
       const message = {
         chatId: this.selectedChat._id,
         senderId: this.currentUser._id,
         content: this.messageText,
         createdAt: new Date(),
-        repliedTo: this.replyText ? { _id: this.messageBeingRepliedTo._id, content: this.messageBeingRepliedTo.content } : null,
+        repliedTo: this.messageBeingRepliedTo 
+          ? { _id: this.messageBeingRepliedTo._id, content: this.messageBeingRepliedTo.content } 
+          : null,
       };
 
-      // If a message is being edited, update it, otherwise send a new message
       if (this.messageBeingEdited) {
-        // Update existing message
         this.messageService.editMessage(this.messageBeingEdited._id, this.messageText).subscribe(
           (response) => {
             console.log('Message edited:', response);
-            
-            // Find the message in the array and update it
             const updatedMessage = this.messages[this.selectedChat._id].find(
               (msg) => msg._id === this.messageBeingEdited._id
             );
             if (updatedMessage) {
               updatedMessage.content = `${this.messageText} (Edited)`;
             }
-  
-            // Reset the edit state
             this.resetEditState();
           },
           (error) => {
@@ -113,17 +165,15 @@ export class ChatWindowComponent implements OnInit, OnChanges {
           }
         );
       } else {
-        // Emit the message to the server to broadcast to other users in the chat
+        // Emit the message for individual or group chat
         this.socket.emit('send_message', message);
 
-        // Immediately add the message to the local message list to update the UI
         if (!this.messages[message.chatId]) {
           this.messages[message.chatId] = [];
         }
         this.messages[message.chatId].push(message);
       }
 
-      // Clear the input field after sending
       this.messageText = '';
     }
   }
@@ -169,6 +219,7 @@ onDeleteMessage(message: any): void {
       this.messages[this.selectedChat._id] = this.messages[this.selectedChat._id].filter(
         (msg) => msg._id !== message._id
       );
+      
     },
     error: (err) => {
       console.error('Failed to delete message:', err);

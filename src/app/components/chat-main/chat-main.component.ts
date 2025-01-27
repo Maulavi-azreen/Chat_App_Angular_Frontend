@@ -78,17 +78,6 @@ export class ChatMainComponent implements OnInit {
   
 
   // Fetch contacts
-  // fetchContacts(): void {
-  //   this.userService.getAllUsers().subscribe(
-  //     (users) => {
-  //       this.contacts = users;
-  //       console.log('Fetched contacts:', this.contacts); // Log contacts to ensure correct structure
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching contacts:', error);
-  //     }
-  //   );
-  // }
   fetchContacts(): void {
     this.userService.getAllUsers().subscribe(
       (users: any[]) => {
@@ -124,7 +113,7 @@ export class ChatMainComponent implements OnInit {
   // Handle contact selection
   onContactSelected(contact: any): void {
     console.log('Selected contact in ChatMain:', contact); // Log selected contact
-    console.log("Chat Id for selected Contact",contact.chatId);
+    this.selectedGroup = null; // Reset selected group
     if (!contact.chatId) {
       const userId = contact._id; // Use the correct property
       if (!userId) {
@@ -163,13 +152,53 @@ export class ChatMainComponent implements OnInit {
 
    // Handle group selection
    onGroupSelected(group: any): void {
-    this.selectedGroup = group; // Set the selected group
-
-    // Set selected chat to group chat
+    console.log('Group selected:', group);
+  
+    this.selectedGroup = group; 
+    this.selectedContact = null; 
     this.selectedChat = group;
+    console.log("Updated selectedGroup:", this.selectedGroup);
+    console.log("Selected Chat ",this.selectedChat);
 
-    this.loadMessages(group._id); // Load messages for selected group chat
+  
+   
+    console.log("Updated selectedChat:", this.selectedChat);
+  
+    // Check if group already exists or needs to be created
+    if (!group._id) {
+      console.log('Group does not exist, creating a new one.');
+  
+      // Example of creating a group with selected users
+      if (group.members && group.members.length > 0) {
+        const selectedUserIds = group.members.map((member: any) => member._id);
+        const groupName = group.name || 'New Group';
+  
+        console.log('Creating group with users:', selectedUserIds);
+        console.log('Group name:', groupName);
+  
+        this.chatService.createGroup(selectedUserIds, groupName).subscribe({
+          next: (response) => {
+            console.log('Group created successfully:', response);
+            // Update the selected group with the newly created group data
+            this.selectedGroup = response;
+            this.selectedChat = response;
+            this.loadMessages(response._id);
+          },
+          error: (error) => {
+            console.error('Error creating group:', error);
+          },
+        });
+      } else {
+        console.error('No members available to create the group.');
+      }
+    } else {
+      console.log('Group already exists, loading messages.');
+      this.editedMessage = null;  // Reset edit state
+      this.repliedMessage = null;  // Reset reply state
+      this.loadMessages(group._id);
+    }
   }
+  
 
   // Load the messages
   loadMessages(chatId: string): void {
@@ -178,11 +207,15 @@ export class ChatMainComponent implements OnInit {
       return;
     }
   
-    this.messageService.getMessages(chatId).subscribe({
-      next: (messages) => {
-        this.messages[chatId] = messages; // Store messages for this chat
-        console.log('Messages loaded:', messages);
-      },
+     // Check if the chat is a group chat or an individual chat
+  const isGroupChat = this.selectedChat?.isGroupChat || false;
+  console.log(`Loading messages for ${isGroupChat ? 'Group' : 'Individual'} Chat:`, chatId);
+
+  this.messageService.getMessages(chatId).subscribe({
+    next: (messages) => {
+      this.messages[chatId] = messages; // Store messages based on chatId
+      console.log(`Messages loaded for ${isGroupChat ? 'group' : 'individual'} chat:`, messages);
+    },
       error: (err) => {
         console.error('Error loading messages:', err);
       },
@@ -191,6 +224,7 @@ export class ChatMainComponent implements OnInit {
 
 
   // Handle message sent for new msg and edited msg
+  //triggered when a message is sent in the child component ie in chat window through message input
   onMessageSent(newMessage: any): void {
     if (this.selectedContact) {
       const chatId = this.selectedContact.chatId;

@@ -13,10 +13,14 @@
   <!-- Chat Window -->
   <div class="chat-window col-12 col-md-8 d-flex flex-column">
     <!-- Show Placeholder if No Contact is Selected -->
-    <ng-container *ngIf="selectedContact; else placeholder">
+    <ng-container *ngIf="selectedChat && messages[selectedChat._id]; else placeholder">
       <!-- Navbar -->
       <div class="chat-navbar">
-        <app-chat-navbar [selectedContact]="selectedContact"></app-chat-navbar>
+        <app-chat-navbar 
+        [selectedContact]="selectedContact"
+        [selectedGroup]="selectedGroup"
+        >
+        </app-chat-navbar>
       </div>
 
       <!-- Scrollable Messages -->
@@ -35,6 +39,7 @@
       <div class="message-input-container">
         <app-message-input
           [selectedContact]="selectedContact"
+          [selectedGroup]="selectedGroup"
           [editedMessage]="editedMessage"
           [repliedMessage]="repliedMessage"
           (messageSent)="onMessageSent($event)"

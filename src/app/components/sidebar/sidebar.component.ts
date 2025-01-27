@@ -67,6 +67,7 @@ export class SidebarComponent {
   // Select a group chat
   selectGroup(group: any): void {
     this.groupSelected.emit(group); // Emit the selected group
+    this.selectedChat = group;  // Store selected group for UI highlight
   }
  // Start creating a group
  createGroupMode(): void {

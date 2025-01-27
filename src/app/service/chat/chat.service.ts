@@ -37,6 +37,4 @@ export class ChatService {
     };
     return this.http.post(`${this.apiUrl}/group`, body, { headers });
   }
-
-  
 }

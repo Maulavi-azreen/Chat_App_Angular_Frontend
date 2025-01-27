@@ -20,6 +20,7 @@ export class MessageService {
     }
    // Get messages for a specific chat
    getMessages(chatId: string): Observable<any> {
+    console.log(`Fetching messages for chatId: ${chatId}`);
     return this.http.get(`${this.apiUrl}/${chatId}`);
   }
   // Fetch message by ID

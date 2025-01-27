@@ -22,12 +22,8 @@
   <button
     class="btn btn-primary"
     (click)="sendMessage()"
-    [disabled]="!messageText || !selectedContact"
+    [disabled]="!messageText.trim() || (!selectedContact?.chatId && !selectedGroup?._id)" 
   >
   {{ editedMessage ? 'Update' : 'Send' }}
   </button>
-   <!-- Error Message -->
-   <!-- <div *ngIf="messageError" class="alert alert-danger mt-2">
-    {{ messageError }}
-  </div> -->
 </div>
