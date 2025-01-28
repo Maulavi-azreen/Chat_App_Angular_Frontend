@@ -8,8 +8,8 @@ import { catchError } from 'rxjs/operators';
 })
 export class SignupService {
 
-  // private baseUrl = 'http://localhost:5000/api/auth'; 
-  private baseUrl = 'https://chat-app-angular-backend.onrender.com/api/auth';
+  private baseUrl = 'http://localhost:5000/api/auth'; 
+  // private baseUrl = 'https://chat-app-angular-backend.onrender.com/api/auth';
 
   constructor(private http: HttpClient) {}
 
