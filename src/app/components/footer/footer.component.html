@@ -2,51 +2,53 @@
   <div class="container">
     <div class="row gy-4">
       <!-- About Section -->
-      <div class="col-lg-4 col-md-6">
-        <a href="#" class="d-flex align-items-center mb-3 text-decoration-none">
-          <span class="fs-4 text-danger fw-bold">ChatMate</span>
+      <div class="col-lg-4 col-md-6 footer-about">
+        <a href="#" class="d-flex align-items-center mb-3 text-decoration-none logo">
+          <span class="fs-4 sitename">ChatMate</span>
         </a>
         <p class="text-muted">Connect with friends, family, and teams through our intuitive platform.</p>
-        <div class="d-flex mt-4">
-          <a href="#" class="btn btn-outline-secondary btn-sm me-2 rounded-circle">
+        <div class="d-flex mt-4 social-links">
+          <a href="#" class="rounded-circle">
             <i class="bi bi-twitter"></i>
           </a>
-          <a href="#" class="btn btn-outline-secondary btn-sm me-2 rounded-circle">
+          <a href="#" class="rounded-circle">
             <i class="bi bi-facebook"></i>
           </a>
-          <a href="#" class="btn btn-outline-secondary btn-sm me-2 rounded-circle">
+          <a href="#" class="rounded-circle">
             <i class="bi bi-instagram"></i>
           </a>
-          <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle">
+          <a href="#" class="rounded-circle">
             <i class="bi bi-linkedin"></i>
           </a>
         </div>
       </div>
 
       <!-- Useful Links -->
-      <div class="col-lg-2 col-md-3">
-        <h5 class="fw-bold">Useful Links</h5>
-        <ul class="list-unstyled">
-          <li class="mb-2"><a routerLink="/" class="text-dark text-decoration-none">Home</a></li>
-          <li class="mb-2"><a routerLink="about" class="text-dark text-decoration-none">About us</a></li>
-          <li><a routerLink="" class="text-dark text-decoration-none">Contact</a></li>
+      <div class="col-lg-2 col-md-3 footer-links">
+        <h4>Useful Links</h4>
+        <ul>
+          <li><a routerLink="/" class="text-dark">Home</a></li>
+          <li><a routerLink="about" class="text-dark">About us</a></li>
+          <li><a routerLink="contact" class="text-dark">Contact</a></li>
         </ul>
       </div>
 
       <!-- Newsletter -->
-      <div class="col-lg-4 col-md-12">
-        <h5 class="fw-bold">Our Newsletter</h5>
+      <div class="col-lg-4 col-md-12 footer-newsletter">
+        <h4>Our Newsletter</h4>
         <p>Subscribe to receive updates on our products and services!</p>
-        <form class="d-flex">
+        <form class="d-flex newsletter-form">
           <input type="email" class="form-control me-2" placeholder="Your Email">
-          <button type="submit" class="btn btn-danger">Subscribe</button>
+          <button type="submit" class="btn">Subscribe</button>
         </form>
       </div>
     </div>
   </div>
 
-  <div class="container text-center mt-4">
-    <p class="mb-0 text-muted">&copy; <strong class="text-danger">ChatMate</strong> All Rights Reserved.</p>
-    <small>Designed with ❤️ using Angular & Bootstrap</small>
+  <div class="container text-center mt-4 copyright">
+    <p class="mb-0 text-muted">
+      &copy; <strong class="text-danger">ChatMate</strong> All Rights Reserved.
+    </p>
+    <small class="credits">Designed with ❤️ using Angular & Bootstrap</small>
   </div>
 </footer>

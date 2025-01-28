@@ -1,9 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Hide scrollbar for Chrome, Safari, and Edge */
+::-webkit-scrollbar {
+  display: none;
+}
 body,
 html {
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Prevent any scrolling */
-  height: 100%; /* Ensure full height layout */
-  width: 100%; /* Ensure full width layout */
+  overflow-y: scroll; /* Allow scrolling */
+  -ms-overflow-style: none;  /* Hide scrollbar for IE & Edge */
+  scrollbar-width: none;  /* Hide scrollbar for Firefox */
+}
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }

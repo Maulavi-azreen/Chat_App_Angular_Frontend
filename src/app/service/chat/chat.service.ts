@@ -37,4 +37,22 @@ export class ChatService {
     };
     return this.http.post(`${this.apiUrl}/group`, body, { headers });
   }
+
+  //Rename a group chat
+  renameGroupChat(chatId:string, chatName: string): Observable<any>{
+    const headers=new HttpHeaders({'Content-Type':'application/json'});
+    const body={
+      chatId , chatName
+    };
+    return this.http.put(`${this.apiUrl}/group/rename`, body , {headers});
+  }
+
+  //delete messages for a chat
+  deleteChatForUser(chatId:string):Observable<any>{
+    const headers=new HttpHeaders({'Content-Type':'application/json'});
+    const body={
+      chatId
+    };
+    return this.http.delete(`${this.apiUrl}/user/delete/message`, {body,headers});
+  }
 }

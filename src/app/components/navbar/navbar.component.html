@@ -1,18 +1,21 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mt-2">
   <div class="container">
     <a class="navbar-brand" href="#">ChatMate</a>
+    <!-- Custom Toggle Button -->
     <button
       class="navbar-toggler"
       type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
+      (click)="toggleNavbar()"
+      [attr.aria-expanded]="!isNavbarCollapsed"
       aria-label="Toggle navigation"
     >
-      <span class="navbar-toggler-icon"></span>
+      <i class="bi bi-list fs-2 text-white"></i> <!-- Bootstrap bi-list icon -->
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div
+      class="collapse navbar-collapse"
+      [ngClass]="{ show: !isNavbarCollapsed }"
+      id="navbarNav"
+    >
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
           <a class="nav-link" routerLink="/">Home</a>

@@ -3,6 +3,11 @@
     background-color: #f8f9fa; /* Light gray background */
     color: #212529; /* Dark gray text color */
     padding: 40px 0;
+    margin-top: auto; /* Ensure it's pushed to the bottom */
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    left: 0;
   }
   
   #footer .footer-top {
@@ -66,6 +71,8 @@
   }
   #footer .footer-newsletter button {
    background-color: #f88557;
+   color: white;
+   font-weight: bold;
   }
   
   #footer .footer-newsletter p {

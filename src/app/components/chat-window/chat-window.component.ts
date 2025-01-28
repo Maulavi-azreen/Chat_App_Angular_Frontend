@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { MessageService } from '../../service/message/message.service';
+import { ChatService } from '../../service/chat/chat.service';
 
 @Component({
   selector: 'app-chat-window',
@@ -26,6 +27,8 @@ export class ChatWindowComponent implements OnInit, OnChanges {
   @Input() currentUser: any; // Logged-in user
   @Output() editMessage = new EventEmitter<any>(); // EventEmitter for emitting message edit event
   @Output() replyMessage = new EventEmitter<any>(); // EventEmitter for emitting message replies event
+  @Output() clearMessages = new EventEmitter<void>(); // Notify parent component about clearing messages
+
 
   socket: Socket;
   messageText: string = ''; // For message input
@@ -38,7 +41,7 @@ export class ChatWindowComponent implements OnInit, OnChanges {
   // To scroll window as new chats are added
   @ViewChild('chatWindow') private chatWindow!: ElementRef;
 
-  constructor(private messageService: MessageService) {
+  constructor(private messageService: MessageService,private chatService: ChatService) {
     this.socket = io('http://localhost:5000'); // Update the URL if needed
   }
 
@@ -75,65 +78,15 @@ export class ChatWindowComponent implements OnInit, OnChanges {
   private setupSocketListeners(): void {
     // Listen for 'receive_message' event to get messages from others
     this.socket.on('receive_message', (message: any) => {
-      if (message.chatId) {
-        // Ensure messages for this chatId exist
+      if (message.chatId && !message.isDeleted) { // Ignore deleted messages
         if (!this.messages[message.chatId]) {
           this.messages[message.chatId] = [];
         }
-        // Append the new message
         this.messages[message.chatId].push(message);
+        this.scrollToBottom();
       }
     });
   }
-
-  // Function to send a message
-  // sendMessage(): void {
-  //   if (this.selectedChat && this.messageText.trim() !== '') {
-  //     const message = {
-  //       chatId: this.selectedChat._id,
-  //       senderId: this.currentUser._id,
-  //       content: this.messageText,
-  //       createdAt: new Date(),
-  //       repliedTo: this.replyText ? { _id: this.messageBeingRepliedTo._id, content: this.messageBeingRepliedTo.content } : null,
-  //     };
-
-  //     // If a message is being edited, update it, otherwise send a new message
-  //     if (this.messageBeingEdited) {
-  //       // Update existing message
-  //       this.messageService.editMessage(this.messageBeingEdited._id, this.messageText).subscribe(
-  //         (response) => {
-  //           console.log('Message edited:', response);
-            
-  //           // Find the message in the array and update it
-  //           const updatedMessage = this.messages[this.selectedChat._id].find(
-  //             (msg) => msg._id === this.messageBeingEdited._id
-  //           );
-  //           if (updatedMessage) {
-  //             updatedMessage.content = `${this.messageText} (Edited)`;
-  //           }
-  
-  //           // Reset the edit state
-  //           this.resetEditState();
-  //         },
-  //         (error) => {
-  //           console.error('Error editing message:', error);
-  //         }
-  //       );
-  //     } else {
-  //       // Emit the message to the server to broadcast to other users in the chat
-  //       this.socket.emit('send_message', message);
-
-  //       // Immediately add the message to the local message list to update the UI
-  //       if (!this.messages[message.chatId]) {
-  //         this.messages[message.chatId] = [];
-  //       }
-  //       this.messages[message.chatId].push(message);
-  //     }
-
-  //     // Clear the input field after sending
-  //     this.messageText = '';
-  //   }
-  // }
 
    // Function to send a message in both individual and group chats
    sendMessage(): void {
@@ -267,6 +220,45 @@ onReactMessage(message: any): void {
     });
   }
 }
+
+ // Function to soft-delete all messages for a user in a chat
+ deleteMessagesForUser(): void {
+  if (this.selectedChat && this.currentUser) {
+    if (confirm('Are you sure you want to delete all messages for yourself in this chat?')) {
+      this.chatService.deleteChatForUser(this.selectedChat._id).subscribe({
+        next: () => {
+          // Remove the messages for the user locally
+          this.messages[this.selectedChat._id] = [];
+          this.clearMessages.emit(); // Notify parent component if needed
+          console.log('All messages deleted (soft delete) for the user.');
+        },
+        error: (err) => {
+          console.error('Failed to delete messages:', err);
+        },
+      });
+    }
+  }
+}
+
+onDeleteChat(): void {
+  if (this.selectedChat && this.currentUser) {
+    if (confirm('Are you sure you want to delete all your messages in this chat?')) {
+      this.chatService.deleteChatForUser(this.selectedChat._id).subscribe({
+        next: () => {
+          // Clear messages locally for the user in the selected chat
+          this.messages[this.selectedChat._id] = [];
+          console.log('All messages deleted (soft delete) for the user.');
+        },
+        error: (err) => {
+          console.error('Failed to delete messages:', err);
+        },
+      });
+    }
+  } else {
+    console.error('No chat selected or user not found.');
+  }
+}
+
   private scrollToBottom(): void {
     try {
       this.chatWindow.nativeElement.scrollTop =

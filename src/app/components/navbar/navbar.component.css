@@ -22,6 +22,20 @@
     color: #f88557 !important;
     text-decoration: none;
   }
+
+  .navbar-toggler{
+    background-color: #f88557;
+  }
+  .navbar-toggler .bi {
+    font-size: 1.5rem; /* Adjust icon size */
+    transition: transform 0.3s ease; /* Optional animation */
+  }
+  
+  .navbar-toggler[aria-expanded="true"] .bi {
+    transform: rotate(90deg); /* Rotate icon when expanded */
+
+  }
+  
   
   /* "Get Started" Button Styling */
   .btn-get-started {

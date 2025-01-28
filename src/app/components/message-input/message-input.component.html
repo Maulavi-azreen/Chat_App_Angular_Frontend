@@ -1,10 +1,10 @@
 <div class="message-input d-flex align-items-center">
   <!-- Replied Message Preview -->
   <div *ngIf="repliedMessage" class="reply-preview">
-    <div class="replied-content">
+    <div class="replied-content text-white">
       Replying to: "{{ repliedMessage.content }}"
     </div>
-    <button (click)="cancelReply()" class="btn btn-sm btn-danger">
+    <button (click)="cancelReply()" class="btn btn-sm">
       Cancel
     </button>
   </div>

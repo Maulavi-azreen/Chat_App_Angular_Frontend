@@ -8,4 +8,29 @@
   <span class="fw-bold">
     {{ selectedContact?.name || selectedGroup?.chatName }}
   </span>
+
+  <div class="chat-options ml-auto">
+    <!-- Rename Chat (common for both group and individual chats) -->
+    <button class="btn btn-link text-white" 
+    (click)="onDeleteChat()"  
+    title="Rename Chat">
+      <i class="bi bi-pencil"></i>
+    </button>
+
+    <!-- Delete Chat (common for both) -->
+    <button class="btn btn-link text-white" 
+    (click)="onDeleteChat()"
+    title="Delete Chat"
+    >
+      <i class="bi bi-trash"></i>
+    </button>
+
+    <!-- Exit Group (only for group chats) -->
+    <button class="btn btn-link text-white" 
+    *ngIf="isGroupChat" (click)="onExitGroup()" 
+    title="Exit Group"
+    >
+      <i class="bi bi-box-arrow-right"></i>
+    </button>
+  </div>
 </div>

@@ -1,26 +1,22 @@
-<section id="hero" class="hero d-flex align-items-center">
+<section class="hero d-flex align-items-center" @fadeInUp>
   <div class="container">
     <div class="row">
-      <div class="col-lg-6 d-flex flex-column justify-content-center">
-        <h1 class="hero-title">Better digital experience with ChatMate</h1>
-        <p class="hero-subtitle">
-          Connect with friends, family, and teams through our intuitive and reliable chat platform.
+      <!-- Text Content -->
+      <div
+        class="col-lg-6 d-flex flex-column justify-content-center text-center text-lg-start"
+        [@fadeInUp]="null"
+      >
+        <h1 class="hero-title" @slideInLeft>Better digital experience with ChatMate</h1>
+        <p class="hero-subtitle" @fadeIn>
+          Connect with friends, family, and teams through our intuitive and
+          reliable chat platform.
         </p>
-        <div class="d-flex align-items-center mt-4">
-          <a routerLink="/login" class="btn btn-get-started me-3">Get Started</a>
+        <div class="d-flex justify-content-center justify-content-lg-start mt-4">
+          <a routerLink="/login" class="btn btn-get-started me-0 me-lg-3" @zoomIn>
+            Get Started
+          </a>
         </div>
       </div>
     </div>
   </div>
 </section>
-<!-- <section>
-<div class="card" style="width: 18rem;">
-  <img src="..." class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
-  </div>
-</div>
-</section> -->
-

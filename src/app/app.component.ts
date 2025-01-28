@@ -5,6 +5,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { CommonModule } from '@angular/common';
 
 
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet,NavbarComponent,FooterComponent,CommonModule],
