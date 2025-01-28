@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class MessageService {
 
-  // private apiUrl = 'http://localhost:5000/api/users'; 
-  private apiUrl = 'https://chat-app-angular-backend.onrender.com/api/message'; // Update with your backend URL
+  private apiUrl = 'http://localhost:5000/api/users'; 
+  // private apiUrl = 'https://chat-app-angular-backend.onrender.com/api/message'; // Update with your backend URL
 
   constructor(private http: HttpClient) {}
 

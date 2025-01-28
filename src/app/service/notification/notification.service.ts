@@ -8,8 +8,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class NotificationService {
 
-  // private apiUrl = 'http://localhost:5000/api/users'; 
-  private apiUrl = 'https://chat-app-angular-backend.onrender.com/api/notifications'; // Update with your backend URL
+  private apiUrl = 'http://localhost:5000/api/users'; 
+  // private apiUrl = 'https://chat-app-angular-backend.onrender.com/api/notifications'; // Update with your backend URL
   private notificationsSubject = new BehaviorSubject<any[]>([]); // Store notifications in a BehaviorSubject
   notifications$ = this.notificationsSubject.asObservable(); // Observable to subscribe to notifications
 
