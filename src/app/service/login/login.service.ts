@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 })
 export class LoginService {
 
-  private baseUrl = 'http://localhost:5000/api/users'; 
+  private baseUrl = 'http://localhost:5000/api/auth'; 
   // private baseUrl = 'https://chat-app-angular-backend.onrender.com/api/auth'; 
 
   constructor(private http: HttpClient) {}
