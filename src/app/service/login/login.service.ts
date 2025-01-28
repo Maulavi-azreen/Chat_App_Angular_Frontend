@@ -5,12 +5,14 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class LoginService {
-  private apiUrl = 'http://localhost:5000/api/auth'; // Replace with your backend API URL
+
+  private baseUrl = 'http://localhost:5000/api/users'; 
+  // private baseUrl = 'https://chat-app-angular-backend.onrender.com/api/auth'; 
 
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<any> {
     const loginData = { email, password };
-    return this.http.post(`${this.apiUrl}/login`, loginData);
+    return this.http.post(`${this.baseUrl}/login`, loginData);
   }
 }

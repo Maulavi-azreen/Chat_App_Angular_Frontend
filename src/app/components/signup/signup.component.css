@@ -35,11 +35,10 @@ section {
   .link {
     color: #ff4a57;
     font-size: 14px;
-    text-decoration: none;
   }
   
   .link:hover {
-    text-decoration: underline;
+    text-decoration: none;
   }
   
   .text-center {

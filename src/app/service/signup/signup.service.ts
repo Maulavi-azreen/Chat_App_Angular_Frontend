@@ -7,7 +7,9 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root', // Makes the service globally available
 })
 export class SignupService {
-  private baseUrl = 'http://localhost:5000/api/auth'; // Backend API base URL
+
+  // private baseUrl = 'http://localhost:5000/api/auth'; 
+  private baseUrl = 'https://chat-app-angular-backend.onrender.com/api/auth';
 
   constructor(private http: HttpClient) {}
 

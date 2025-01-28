@@ -6,7 +6,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ChatService {
-  private apiUrl = 'http://localhost:5000/api/chat';
+
+  // private apiUrl = 'http://localhost:5000/api/users'; 
+  private apiUrl = 'https://chat-app-angular-backend.onrender.com/api/chat';
 
   constructor(private http: HttpClient) {}
 
