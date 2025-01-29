@@ -16,5 +16,5 @@ export const routes: Routes = [
     {path:'chat',component:ChatMainComponent, canActivate: [authGuard] },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '404', component: NotFoundComponent },
-  { path: '**', redirectTo: '404' }, // Wildcard route for 404
+    { path: '**', redirectTo: '404' }, // Wildcard route for 404
 ];

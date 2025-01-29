@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ChatService } from '../../service/chat/chat.service';
 
-
-
 @Component({
   selector: 'app-sidebar',
   imports: [FormsModule, CommonModule],
@@ -15,11 +13,11 @@ import { ChatService } from '../../service/chat/chat.service';
 export class SidebarComponent {
   @Input() contacts: any[] = []; // Receive contacts from parent
   @Input() currentUser: any; // Logged-in user details passed from parent
-  @Input() groups: any[] = [];   // Received groups from parent
+  @Input() groups: any[] = []; // Received groups from parent
 
   @Output() selectedChatChange = new EventEmitter<any>(); // Emits selected chat (group or contact)
   @Output() contactSelected = new EventEmitter<any>(); // Emit selected contact to parent
-  @Output() groupSelected: EventEmitter<any> = new EventEmitter();  // Added output for group selection
+  @Output() groupSelected: EventEmitter<any> = new EventEmitter(); // Added output for group selection
 
   searchTerm: string = ''; // For search functionality
   filteredContacts: any[] = []; // For displaying filtered users
@@ -30,12 +28,10 @@ export class SidebarComponent {
   createdGroup: any = null; // To store the created group
   selectedChat: any;
 
-
   constructor(private router: Router, private chatService: ChatService) {}
 
   ngOnChanges(): void {
     this.filterContacts();
-    
   }
 
   // For not showing loggedin username to themselves
@@ -47,15 +43,15 @@ export class SidebarComponent {
     );
   }
 
-    // Emit selected contact to parent component or handle group selection
+  // Emit selected contact to parent component or handle group selection
   selectContact(contact: any): void {
     if (this.isCreateGroupMode) {
       // In create group mode, toggle contact selection
       const index = this.selectedContacts.indexOf(contact);
       if (index > -1) {
-        this.selectedContacts.splice(index, 1);  // Deselect contact
+        this.selectedContacts.splice(index, 1); // Deselect contact
       } else {
-        this.selectedContacts.push(contact);  // Select contact
+        this.selectedContacts.push(contact); // Select contact
       }
       // Show the arrow if 2 or more contacts are selected
       this.showArrow = this.selectedContacts.length >= 2;
@@ -67,15 +63,15 @@ export class SidebarComponent {
   // Select a group chat
   selectGroup(group: any): void {
     this.groupSelected.emit(group); // Emit the selected group
-    this.selectedChat = group;  // Store selected group for UI highlight
+    this.selectedChat = group; // Store selected group for UI highlight
   }
- // Start creating a group
- createGroupMode(): void {
-  this.isCreateGroupMode = true;  // Switch to group creation mode
-  if (this.selectedContacts.length === 0) {
-    alert('Please select contacts to add to the group.');
+  // Start creating a group
+  createGroupMode(): void {
+    this.isCreateGroupMode = true; // Switch to group creation mode
+    if (this.selectedContacts.length === 0) {
+      alert('Please select contacts to add to the group.');
+    }
   }
-}
 
   // Confirm group creation and send to backend
   createGroup(): void {
@@ -84,7 +80,7 @@ export class SidebarComponent {
       return;
     }
 
-    const contactIds = this.selectedContacts.map(contact => contact._id);
+    const contactIds = this.selectedContacts.map((contact) => contact._id);
     const groupName = prompt('Enter a group name:');
 
     if (groupName) {
@@ -101,8 +97,6 @@ export class SidebarComponent {
       );
     }
   }
-
-
 
   // Navigate to update profile page
   updateProfile(): void {

@@ -13,6 +13,8 @@ import {
 import { io, Socket } from 'socket.io-client';
 import { MessageService } from '../../service/message/message.service';
 import { ChatService } from '../../service/chat/chat.service';
+import { SocketService } from '../../service/socket/socket.service';
+
 
 @Component({
   selector: 'app-chat-window',
@@ -20,7 +22,7 @@ import { ChatService } from '../../service/chat/chat.service';
   templateUrl: './chat-window.component.html',
   styleUrl: './chat-window.component.css',
 })
-export class ChatWindowComponent implements OnInit, OnChanges {
+export class ChatWindowComponent{
   @Input() selectedChat: any; // Current chat object
   @Input() messages: { [key: string]: any[] } = {}; // Messages grouped by chatId
   @Input() selectedContact: any; // Selected contact
@@ -41,52 +43,21 @@ export class ChatWindowComponent implements OnInit, OnChanges {
   // To scroll window as new chats are added
   @ViewChild('chatWindow') private chatWindow!: ElementRef;
 
-  constructor(private messageService: MessageService,private chatService: ChatService) {
-    this.socket = io('http://localhost:5000'); // Update the URL if needed
+  constructor(private messageService: MessageService,private chatService: ChatService, private socketService:SocketService) {
+    this.socket = this.socketService.getSocket();
   }
 
-  ngOnInit(): void {
-    this.setupSocketListeners();
-  }
+  // ngOnInit(): void {
+  //   this.socket = this.socketService.getSocket();
+  // }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // if (changes['selectedChat'] && this.selectedChat) {
-    //   this.joinChat();
-    // }
-    if (changes['selectedChat'] && this.selectedChat) {
-      if (this.selectedChat?.isGroupChat || this.selectedChat?.participants) {
-        console.log('Group chat detected');
-      }
-      this.joinChat();
-    }
-  }
 
   ngAfterViewChecked(): void {
     // Scroll to the bottom after view has been updated
     this.scrollToBottom();
   }
 
-  // Joining a group chat or one-on-one chat
-  private joinChat(): void {
-    if (this.selectedChat?._id) {
-      console.log(`Joining chat ID: ${this.selectedChat._id}`);
-      this.socket.emit('join_chat', this.selectedChat._id);
-    }
-  }
 
-  // Setup listeners for socket events
-  private setupSocketListeners(): void {
-    // Listen for 'receive_message' event to get messages from others
-    this.socket.on('receive_message', (message: any) => {
-      if (message.chatId && !message.isDeleted) { // Ignore deleted messages
-        if (!this.messages[message.chatId]) {
-          this.messages[message.chatId] = [];
-        }
-        this.messages[message.chatId].push(message);
-        this.scrollToBottom();
-      }
-    });
-  }
 
    // Function to send a message in both individual and group chats
    sendMessage(): void {
@@ -96,15 +67,14 @@ export class ChatWindowComponent implements OnInit, OnChanges {
         senderId: this.currentUser._id,
         content: this.messageText,
         createdAt: new Date(),
-        repliedTo: this.messageBeingRepliedTo 
-          ? { _id: this.messageBeingRepliedTo._id, content: this.messageBeingRepliedTo.content } 
+        repliedTo: this.messageBeingRepliedTo
+          ? { _id: this.messageBeingRepliedTo._id, content: this.messageBeingRepliedTo.content }
           : null,
       };
 
       if (this.messageBeingEdited) {
-        this.messageService.editMessage(this.messageBeingEdited._id, this.messageText).subscribe(
-          (response) => {
-            console.log('Message edited:', response);
+        this.messageService.editMessage(this.messageBeingEdited._id, this.messageText).subscribe({
+          next: (response) => {
             const updatedMessage = this.messages[this.selectedChat._id].find(
               (msg) => msg._id === this.messageBeingEdited._id
             );
@@ -113,12 +83,9 @@ export class ChatWindowComponent implements OnInit, OnChanges {
             }
             this.resetEditState();
           },
-          (error) => {
-            console.error('Error editing message:', error);
-          }
-        );
+          error: (error) => console.error('Error editing message:', error),
+        });
       } else {
-        // Emit the message for individual or group chat
         this.socket.emit('send_message', message);
 
         if (!this.messages[message.chatId]) {
@@ -130,6 +97,7 @@ export class ChatWindowComponent implements OnInit, OnChanges {
       this.messageText = '';
     }
   }
+
 
   // Start editing a message
   onEditMessage(message: any): void {

@@ -7,6 +7,9 @@ import { UserService } from '../../service/user/user.service';
 import { MessageService } from '../../service/message/message.service';
 import { ChatService } from '../../service/chat/chat.service';
 import { ChatNavbarComponent } from '../chat-navbar/chat-navbar.component';
+import { SocketService } from '../../service/socket/socket.service';
+import { Socket,io } from 'socket.io-client';
+
 
 @Component({
   selector: 'app-chat-main',
@@ -21,6 +24,7 @@ import { ChatNavbarComponent } from '../chat-navbar/chat-navbar.component';
   styleUrl: './chat-main.component.css',
 })
 export class ChatMainComponent implements OnInit {
+  socket!: Socket;
    // All contacts fetched from the backend
   contacts: any[] = [];
 
@@ -48,34 +52,45 @@ export class ChatMainComponent implements OnInit {
 
   selectedGroup: any = null;  // Track selected group chat
 
+  userStatus: string = 'offline';   //user status
+
   constructor(
     private userService: UserService,
     private chatService: ChatService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private socketService: SocketService
   ) {}
 
   ngOnInit(): void {
+    this.socket = this.socketService.getSocket();
+    this.setupSocketListeners();
+
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       try {
         this.currentUser = JSON.parse(storedUser);
       } catch (error) {
         console.error('Failed to parse user from localStorage:', error);
-        this.currentUser = null; // Fallback in case of parsing error
       }
-    } else {
-      console.error('No user found in localStorage');
-      this.currentUser = null;
     }
-  
+
     if (this.currentUser?._id) {
       this.fetchContacts();
       this.fetchChats();
-    } else {
-      console.error('Invalid user data. Ensure the user is logged in.');
     }
   }
-  
+
+  private setupSocketListeners(): void {
+    this.socket.off('receive_message'); // Remove existing listener
+    this.socket.on('receive_message', (message: any) => {
+      if (message.chatId && !message.isDeleted) {
+        if (!this.messages[message.chatId]) {
+          this.messages[message.chatId] = [];
+        }
+        this.messages[message.chatId].push(message);
+      }
+    });
+  }
 
   // Fetch contacts
   fetchContacts(): void {
@@ -110,6 +125,17 @@ export class ChatMainComponent implements OnInit {
     });
   }
 
+  getUserStatus(userId: string): void {
+    console.log(`Requesting status for user: ${userId}`);
+    this.socketService.checkUserStatus(userId).subscribe({
+      next: (status) => {
+        console.log('Status received:', status); // Log the status received from the observable
+        this.userStatus = status.status;
+      },
+      error: (err) => console.error('Error fetching user status:', err),
+    });
+  }
+
   // Handle contact selection
   onContactSelected(contact: any): void {
     console.log('Selected contact in ChatMain:', contact); // Log selected contact
@@ -134,6 +160,7 @@ export class ChatMainComponent implements OnInit {
           this.selectedChat = chat; // Set the selected chat
 
           this.loadMessages(chat._id);
+          // this.getUserStatus(userId);  // Fetch user status when contact is selected
           console.log('New chat created:', chat);
         },
         error: (err) => {
@@ -147,8 +174,17 @@ export class ChatMainComponent implements OnInit {
         (chat) => chat._id === contact.chatId
       );
       this.loadMessages(contact.chatId);
+      // this.getUserStatus(contact._id);  // Fetch user status when contact is selected
     }
   }
+  // getUserStatus(userId: string): void {
+  //   this.socketService.emitUserOnline(userId).subscribe({
+  //     next: (status) => {
+  //       this.userStatus = status;
+  //     },
+  //     error: (err) => console.error('Error fetching user status:', err),
+  //   });
+  // }
 
    // Handle group selection
    onGroupSelected(group: any): void {

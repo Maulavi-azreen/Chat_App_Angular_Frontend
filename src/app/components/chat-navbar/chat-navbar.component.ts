@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component ,Input,AfterViewInit } from '@angular/core';
+import { Component ,Input} from '@angular/core';
 import { ChatService } from '../../service/chat/chat.service';
+
 
 @Component({
   selector: 'app-chat-navbar',
@@ -8,12 +9,16 @@ import { ChatService } from '../../service/chat/chat.service';
   templateUrl: './chat-navbar.component.html',
   styleUrl: './chat-navbar.component.css'
 })
-export class ChatNavbarComponent {
+export class ChatNavbarComponent{
   @Input() selectedContact: any;
   @Input() selectedGroup : any;
+  @Input() userStatus: string = 'offline';
+
 
 
   constructor(private chatService: ChatService){}
+
+
    // Determine if it's a group chat or individual chat for rendering icons on navbar accordingly
    get isGroupChat(): boolean {
     return !!this.selectedGroup;
