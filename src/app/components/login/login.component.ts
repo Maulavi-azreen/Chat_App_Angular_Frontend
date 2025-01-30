@@ -14,10 +14,12 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
   errorMessage: string = '';
+  successMessage: string='';
 
   constructor(private loginService: LoginService, private router: Router) {}
 
   onSubmit(): void {
+    this.successMessage="";
     if (!this.email || !this.password) {
       this.errorMessage = 'Email and password are required.';
       return;
@@ -33,9 +35,13 @@ export class LoginComponent {
           // email: response.email,
           // profilePic: response.profilePic,
         }));
+        this.successMessage = 'Login successful! ';
 
-        // Redirect to dashboard or another page
+        setTimeout(()=>{
+           // Redirect to dashboard or another page
         this.router.navigate(['/chat']);
+        },2000)
+       
       },
       (error) => {
         this.errorMessage = error.error.message || 'Login failed. Please try again.';

@@ -29,6 +29,10 @@
               </div>
               <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
+            <!-- Success Message -->
+            <div *ngIf="successMessage" class="alert alert-success mt-3">
+              {{ successMessage }}
+            </div>
              <!-- Error Message -->
           <div *ngIf="errorMessage" class="alert alert-danger mt-3">
             {{ errorMessage }}

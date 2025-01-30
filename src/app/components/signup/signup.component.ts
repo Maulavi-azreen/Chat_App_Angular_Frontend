@@ -16,17 +16,22 @@ export class SignupComponent {
   password = '';
   confirmPassword = '';
   errorMessage = '';
+  successMessage = '';
 
   constructor(private signupService: SignupService, private router: Router) {}
 
   // Handle form submission
   onSubmit() {
+    this.successMessage = '';
     // debugger;
     this.signupService.registerUser(this.name, this.email, this.password, this.confirmPassword).subscribe({
       next: (response) => {
         // debugger;
         console.log('User registered successfully:', response);
-        this.router.navigate(['/login']); // Redirect to login page after successful signup
+        this.successMessage = 'Signup successful! and a welcome email has been sent to you. Redirecting to login...';
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
       },
       error: (err) => {
         console.error('Signup failed:', err);

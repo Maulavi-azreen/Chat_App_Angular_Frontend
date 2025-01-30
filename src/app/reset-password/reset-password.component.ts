@@ -2,12 +2,12 @@
 import { Component } from '@angular/core';
 import { UserService } from '../service/user/user.service';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 FormsModule
 
 @Component({
-  imports:[FormsModule,CommonModule],
+  imports:[FormsModule,CommonModule,RouterLink],
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css',

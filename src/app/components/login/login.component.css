@@ -21,19 +21,19 @@ section {
   }
   
   .btn-primary {
-    background-color: #ff4a57;
-    border-color: #ff4a57;
+    background-color: #f88557;
+    border-color: #f88557;
     font-size: 16px;
     font-weight: 500;
   }
   
   .btn-primary:hover {
-    background-color: #e63e4c;
-    border-color: #e63e4c;
+    background-color: #f88557;
+    border-color: #f88557;
   }
   
   .link {
-    color: #ff4a57;
+    color: #f88557;
     font-size: 14px;
   }
   
