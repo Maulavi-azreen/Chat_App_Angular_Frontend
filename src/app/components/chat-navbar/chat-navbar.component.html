@@ -9,8 +9,11 @@
      <!-- For individual chats, show name and user status -->
      <ng-container *ngIf="!isGroupChat">
       {{ selectedContact?.name }}
-      <span [ngClass]="{'online': userStatus === 'online', 'offline': userStatus === 'offline'}">{{ userStatus }}</span>
+
     </ng-container>
+    <small *ngIf="!isGroupChat" [ngClass]="{'text-success': userStatus === 'online', 'text-danger': userStatus === 'offline'}">
+      {{ userStatus }}
+    </small>
     <!-- For group chats, show group name and list of members -->
     <ng-container *ngIf="isGroupChat">
       {{ selectedGroup?.chatName }}
@@ -20,11 +23,11 @@
         </span>
       </div>
     </ng-container>
-    </span>
+    </span>    
   <div class="chat-options ml-auto">
     <!-- Rename Chat (common for both group and individual chats) -->
     <button class="btn btn-link text-white" 
-    (click)="onDeleteChat()"  
+    (click)="onRenameChat()"  
     title="Rename Chat">
       <i class="bi bi-pencil"></i>
     </button>
@@ -45,4 +48,5 @@
       <i class="bi bi-box-arrow-right"></i>
     </button>
   </div>
+  
 </div>

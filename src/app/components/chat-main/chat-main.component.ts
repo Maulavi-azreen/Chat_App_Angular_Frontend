@@ -69,6 +69,11 @@ export class ChatMainComponent implements OnInit {
     if (storedUser) {
       try {
         this.currentUser = JSON.parse(storedUser);
+           // Notify backend that this user is online
+      if (this.currentUser?._id) {
+        console.log(`Emitting userConnected for userId: ${this.currentUser._id}`);
+        this.socket.emit('userConnected', this.currentUser._id);
+      }
       } catch (error) {
         console.error('Failed to parse user from localStorage:', error);
       }
@@ -129,7 +134,7 @@ export class ChatMainComponent implements OnInit {
     console.log(`Requesting status for user: ${userId}`);
     this.socketService.checkUserStatus(userId).subscribe({
       next: (status) => {
-        console.log('Status received:', status); // Log the status received from the observable
+        console.log('Status received:', status); 
         this.userStatus = status.status;
       },
       error: (err) => console.error('Error fetching user status:', err),
@@ -160,7 +165,7 @@ export class ChatMainComponent implements OnInit {
           this.selectedChat = chat; // Set the selected chat
 
           this.loadMessages(chat._id);
-          // this.getUserStatus(userId);  // Fetch user status when contact is selected
+          this.getUserStatus(userId);  // Fetch user status when contact is selected
           console.log('New chat created:', chat);
         },
         error: (err) => {
@@ -174,18 +179,9 @@ export class ChatMainComponent implements OnInit {
         (chat) => chat._id === contact.chatId
       );
       this.loadMessages(contact.chatId);
-      // this.getUserStatus(contact._id);  // Fetch user status when contact is selected
+      this.getUserStatus(contact._id);  // Fetch user status when contact is selected
     }
   }
-  // getUserStatus(userId: string): void {
-  //   this.socketService.emitUserOnline(userId).subscribe({
-  //     next: (status) => {
-  //       this.userStatus = status;
-  //     },
-  //     error: (err) => console.error('Error fetching user status:', err),
-  //   });
-  // }
-
    // Handle group selection
    onGroupSelected(group: any): void {
     console.log('Group selected:', group);
