@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +11,8 @@ export class ChatService {
   // private apiUrl = 'https://chat-app-angular-backend.onrender.com/api/chat';
 
   constructor(private http: HttpClient) {}
+
+  
 
   // Create Chat
   createChat(userId: string): Observable<any> {
@@ -40,21 +42,26 @@ export class ChatService {
     return this.http.post(`${this.apiUrl}/group`, body, { headers });
   }
 
-  //Rename a group chat
-  renameGroupChat(chatId:string, chatName: string): Observable<any>{
-    const headers=new HttpHeaders({'Content-Type':'application/json'});
-    const body={
-      chatId , chatName
-    };
-    return this.http.put(`${this.apiUrl}/group/rename`, body , {headers});
+  //Rename a chat (both group and individual)
+  renameChat(chatId: string, chatName: string): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const body = { chatId, chatName };
+  
+    return this.http.put(`${this.apiUrl}/rename`, body, { headers });
   }
 
   //delete messages for a chat
   deleteChatForUser(chatId:string):Observable<any>{
+    console.log("Chat id",chatId);
     const headers=new HttpHeaders({'Content-Type':'application/json'});
-    const body={
-      chatId
-    };
-    return this.http.delete(`${this.apiUrl}/user/delete/message`, {body,headers});
+    return this.http.delete(`${this.apiUrl}/user/delete/message/${chatId}`, {headers});
+  }
+    // to refresh chats after deleting and we are calling fetch chats in chat navbar which is created in chat main component
+  private chatRefreshSubject = new Subject<void>();
+
+  chatRefresh$ = this.chatRefreshSubject.asObservable(); // Observable to subscribe
+
+  notifyChatDeleted(): void {
+    this.chatRefreshSubject.next();  // Emit event
   }
 }

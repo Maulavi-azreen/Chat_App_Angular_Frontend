@@ -81,7 +81,10 @@ export class ChatMainComponent implements OnInit {
 
     if (this.currentUser?._id) {
       this.fetchContacts();
+        // Subscribe to chat deletion event
+    this.chatService.chatRefresh$.subscribe(() => {
       this.fetchChats();
+    });
     }
   }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component ,Input} from '@angular/core';
+import { Component ,Input,Output,EventEmitter} from '@angular/core';
 import { ChatService } from '../../service/chat/chat.service';
 
 
@@ -14,6 +14,8 @@ export class ChatNavbarComponent{
   @Input() selectedGroup : any;
   @Input() userStatus: string = 'offline';
 
+  @Output() chatDeleted = new EventEmitter<void>();
+
 
 
   constructor(private chatService: ChatService){}
@@ -27,54 +29,63 @@ export class ChatNavbarComponent{
 
   // Handle rename
   onRenameChat(): void {
-    if (this.isGroupChat && this.selectedGroup?._id) {
-      const newChatName = prompt('Enter new group name:', this.selectedGroup.chatName);
-      
-      if (newChatName && newChatName.trim() !== '') {
-        this.chatService.renameGroupChat(this.selectedGroup._id, newChatName.trim()).subscribe({
-          next: (updatedGroup) => {
-            console.log('Group renamed successfully:', updatedGroup);
-            this.selectedGroup.chatName = updatedGroup.chatName;  // Update UI with new name
+    const newChatName = prompt('Enter new chat name:', this.isGroupChat ? this.selectedGroup?.chatName : this.selectedContact?.name);
+  
+    if (newChatName && newChatName.trim() !== '') {
+      const chatId = this.isGroupChat ? this.selectedGroup?._id : this.selectedContact?.chatId; // Get the chat ID
+      if (!chatId) {
+        alert('Invalid chat selection.');
+        return;
+      }
+  
+      this.chatService.renameChat(chatId, newChatName.trim()).subscribe({
+        next: (updatedChat) => {
+          console.log('Chat renamed successfully:', updatedChat);
+          if (this.isGroupChat) {
+            this.selectedGroup.chatName = updatedChat.chatName;  // Update UI
+          } else {
+            this.selectedContact.name = updatedChat.chatName;  // Update UI
+          }
+        },
+        error: (err) => {
+          console.error('Error renaming chat:', err);
+          alert('Failed to rename chat. Please try again.');
+        },
+      });
+    }
+  }
+  
+  // Handle delete
+  onDeleteChat(): void {
+    const chatId = this.isGroupChat
+      ? this.selectedGroup?._id
+      : this.selectedContact?.chatId;  // Ensure it's the chat ID, not user ID!
+  
+    if (chatId) {
+      if (confirm('Are you sure you want to delete this chat? This action cannot be undone.')) {
+        this.chatService.deleteChatForUser(chatId).subscribe({
+          next: (response) => {
+            console.log('Chat deleted successfully:', response);
+            alert('Chat deleted for you.');
+            // Optionally clear the selected chat from the UI
+            if (this.isGroupChat) {
+              this.selectedGroup = null;
+            } else {
+              this.selectedContact = null;
+            }
           },
           error: (err) => {
-            console.error('Error renaming group:', err);
-            alert('Failed to rename group. Please try again.');
+            console.error('Error deleting chat:', err);
+            alert('Failed to delete chat. Please try again.');
           },
         });
       }
     } else {
-      alert('Group chat not selected or invalid group ID.');
+      alert('No chat selected to delete.');
     }
   }
-  // Handle delete
-  onDeleteChat(): void {
-    const chatId = this.isGroupChat
-    ? this.selectedGroup?._id
-    : this.selectedContact?._id;
-
-  if (chatId) {
-    if (confirm('Are you sure you want to delete this chat? This action cannot be undone.')) {
-      this.chatService.deleteChatForUser(chatId).subscribe({
-        next: (response) => {
-          console.log('Chat deleted successfully:', response);
-          alert('Chat deleted for you.');
-          // Optionally clear the selected chat from the UI
-          if (this.isGroupChat) {
-            this.selectedGroup = null;
-          } else {
-            this.selectedContact = null;
-          }
-        },
-        error: (err) => {
-          console.error('Error deleting chat:', err);
-          alert('Failed to delete chat. Please try again.');
-        },
-      });
-    }
-  } else {
-    alert('No chat selected to delete.');
-  }
-}
+  
+  
 
 
   // Handle exit group (only applicable for group chats)
