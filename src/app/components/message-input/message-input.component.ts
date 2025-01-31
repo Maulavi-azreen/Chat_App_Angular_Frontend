@@ -33,62 +33,22 @@ export class MessageInputComponent {
     const chatId = this.selectedContact?.chatId || this.selectedGroup?._id;
     const receiverId = this.selectedContact?._id || this.selectedGroup?._id;
 
-    if (!chatId || !receiverId) {
+    if (!chatId || !receiverId || !this.currentUser?._id) {
       this.messageError.emit('Unable to find chat. Please select a contact or group.');
       return;
     }
 
-    if (this.editedMessage) {
-      // Update existing message
-      this.messageService.editMessage(this.editedMessage._id, this.messageText).subscribe({
-        next: (updatedMessage) => {
-          this.messageSent.emit(updatedMessage);
-          this.editedMessage = null;
-          this.messageText = '';
-        },
-        error: () => {
-          this.messageError.emit('Failed to update the message.');
-        },
-      });
-    } else if (this.repliedMessage) {
-      this.messageService.replyToMessage(this.repliedMessage._id, this.messageText, chatId).subscribe({
-        next: (reply) => {
-          this.messageSent.emit(reply);
-          this.repliedMessage = null;
-          this.messageText = '';
-        },
-        error: () => {
-          this.messageError.emit('Failed to reply to the message.');
-        },
-      });
-    } else {
-      // Create a new message object
-      const messageData = {
-        chatId: chatId,
-        senderId: this.currentUser._id,
-        receiverId: receiverId,
-        content: this.messageText,
-        createdAt: new Date(),
-        repliedTo: this.repliedMessage
-          ? {
-              _id: this.repliedMessage._id,
-              content: this.repliedMessage.content,
-            }
-          : null,
-      };
+    // ✅ Now passing separate arguments instead of an object
+    this.socketService.sendMessage(
+      this.currentUser._id,  // Sender ID
+      receiverId,            // Receiver ID
+      this.messageText,       // Message
+      chatId                 // Chat ID
+    );
 
-      // Send the message via WebSocket (real-time)
-      this.socketService.sendMessage(
-        messageData.senderId,
-        messageData.receiverId,
-        messageData.content,
-        messageData.chatId
-      );
-
-      // Emit the message locally to update UI
-      this.messageSent.emit(messageData);
-      this.messageText = ''; // Clear input field
-    }
+    // Emit message event for UI update
+    this.messageSent.emit(this.messageText);
+    this.messageText = ''; 
   }
 
   
