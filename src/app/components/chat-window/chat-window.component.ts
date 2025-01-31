@@ -50,6 +50,7 @@ export class ChatWindowComponent {
       const message = {
         chatId: this.selectedChat._id,
         senderId: this.currentUser._id,
+        receiverId: this.getReceiverId(), // Fetch receiver ID based on chat type
         content: this.messageText,
         createdAt: new Date(),
         repliedTo: this.messageBeingRepliedTo
@@ -76,7 +77,13 @@ export class ChatWindowComponent {
             error: (error) => console.error('Error editing message:', error),
           });
       } else {
-        this.socket.emit('send_message', message);
+       // Send message using SocketService
+       this.socketService.sendMessage(
+        message.senderId,
+        message.receiverId,
+        message.content,
+        message.chatId
+      );
 
         if (!this.messages[message.chatId]) {
           this.messages[message.chatId] = [];
@@ -87,6 +94,16 @@ export class ChatWindowComponent {
       this.messageText = '';
     }
   }
+  // **Helper function to get receiverId based on chat type**
+private getReceiverId(): string {
+  if (this.selectedChat.isGroupChat) {
+    return this.selectedChat._id; // For group chats, the receiver is the group itself
+  } else {
+    return this.selectedChat.participants.find(
+      (participant: any) => participant._id !== this.currentUser._id
+    )?._id;
+  }
+}
 
   // Start editing a message
   onEditMessage(message: any): void {

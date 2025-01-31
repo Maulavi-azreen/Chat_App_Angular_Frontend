@@ -17,6 +17,9 @@ export class ChatNavbarComponent{
   @Output() chatDeleted = new EventEmitter<void>();
 
 
+  chats : any[]=[]
+  groups:any[]=[]
+
 
   constructor(private chatService: ChatService){}
 
@@ -26,7 +29,17 @@ export class ChatNavbarComponent{
     return !!this.selectedGroup;
   }
 
-
+  fetchChats(): void {
+    this.chatService.fetchChats().subscribe({
+      next: (chats) => {
+        const userId = localStorage.getItem('userId'); // Get logged-in user's ID
+        this.chats = chats.filter(chat => !chat.deletedForUsers.includes(userId)); // Hide deleted chats
+  
+        this.groups = this.chats.filter(chat => chat.isGroupChat);
+      },
+      error: (error) => console.error('Error fetching chats:', error),
+    });
+  }
   // Handle rename
   onRenameChat(): void {
     const newChatName = prompt('Enter new chat name:', this.isGroupChat ? this.selectedGroup?.chatName : this.selectedContact?.name);
@@ -67,6 +80,7 @@ export class ChatNavbarComponent{
           next: (response) => {
             console.log('Chat deleted successfully:', response);
             alert('Chat deleted for you.');
+            this.fetchChats();
             // Optionally clear the selected chat from the UI
             if (this.isGroupChat) {
               this.selectedGroup = null;

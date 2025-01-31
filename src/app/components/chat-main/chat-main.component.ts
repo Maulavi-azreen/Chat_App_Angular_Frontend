@@ -85,6 +85,16 @@ export class ChatMainComponent implements OnInit {
     this.chatService.chatRefresh$.subscribe(() => {
       this.fetchChats();
     });
+     // Subscribe to real-time messages
+     this.socketService.onMessageReceived().subscribe((message) => {
+      if (message.chatId) {
+        if (!this.messages[message.chatId]) {
+          this.messages[message.chatId] = [];
+        }
+        this.messages[message.chatId].push(message);
+      }
+    });
+
     }
   }
 
