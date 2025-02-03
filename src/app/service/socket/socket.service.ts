@@ -20,10 +20,6 @@ export class SocketService {
         }
       });
 
-      // Listen for incoming messages
-      this.socket.on('receiveMessage', (data) => {
-        console.log('New message received:', data);
-      });
     }
   }
 
@@ -42,40 +38,46 @@ export class SocketService {
   }
 
   // **Send a message (real-time)**
-  sendMessage(
-    senderId: string,
-    receiverId: string,
-    message: string,
-    chatId: string
-  ): void {
+  sendMessage(senderId: string, receiverId: string, message: string, chatId: string): void {
     if (!senderId || !receiverId || !message || !chatId) {
-      console.error('sendMessage called with missing parameters.');
+      console.error('Missing parameters for sending message.');
       return;
     }
-
+  
     const msgData = { senderId, receiverId, message, chatId };
-    this.socket.emit('sendMessage', msgData);
+  
+    this.socket.emit('sendMessage', msgData, (ack: { success: boolean; error?: string }) => {
+      if (!ack.success) {
+        console.error('Error sending message:', ack.error);
+      }
+    });
+  
     console.log('Message sent:', msgData);
   }
 
-  // **Listen for incoming messages (real-time)**
-  receiveMessages(): Observable<any> {
-    return new Observable((observer) => {
-      this.socket.on('receiveMessage', (data) => {
-        console.log('Message received in service:', data);
-        observer.next(data);
-      });
-    });
-  }
    // Listen for incoming messages
-   onMessageReceived(): Observable<any> {
+  onMessageReceived(): Observable<any> {
     return new Observable((observer) => {
-      this.socket.on('receive_message', (message) => {
-        console.log('Message received via socket:', message);
-        observer.next(message);
+      this.socket.on('receiveMessage', (message: any) => {
+        if (typeof message === 'string') {
+          try {
+            message = JSON.parse(message); // Convert string to object
+          } catch (error) {
+            console.error('Error parsing message:', error);
+            return;
+          }
+        }
+  
+        if (typeof message === 'object' && message.content) {
+          console.log('Real-time message received:', message);
+          observer.next(message);  // Push message to the UI in real-time
+        } else {
+          console.error('Received invalid message format:', message);
+        }
       });
     });
   }
+  
 
   // Emit an event to check user status
   checkUserStatus(
