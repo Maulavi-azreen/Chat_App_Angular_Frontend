@@ -16,18 +16,29 @@ export class MessageService {
 
   constructor(private http: HttpClient, private socketService:SocketService) {}
 
-     // **Send a message (Real-time + API call)**
+     // **Send a message via API call**
      sendMessage(content: string, chatId: string, senderId: string, receiverId: string): Observable<any> {
+      console.log("📡 Preparing API call for message:", { content, chatId, senderId, receiverId });
+    
       if (!content || !chatId || !senderId || !receiverId) {
+        console.error('❌ MessageService.sendMessage: Missing required fields:', { content, chatId, senderId, receiverId });
         throw new Error('Content, chatId, senderId, and receiverId are required');
       }
-      console.log('Sending message:', content); // Debug log
-      // **Emit message via Socket.io**
-      this.socketService.sendMessage(senderId, receiverId, content, chatId);
-  
-      // **Save message to database**
-      return this.http.post(this.apiUrl, { content, chatId });
+    
+      return this.http.post(this.apiUrl, { content, chatId, senderId, receiverId });
     }
+    
+    // **Update messages list with real-time data**
+updateMessages(chatId: string, message: any): void {
+  let currentMessages = this.messagesSubject.getValue(); // Get the current array of messages
+  const chatMessages = currentMessages.filter((msg) => msg.chatId === chatId);
+
+  // Add the new message to the chat's message list
+  chatMessages.push(message);
+
+  // Update the messages subject with the new messages list
+  this.messagesSubject.next([...currentMessages]);  // Emit the updated messages list
+}
 
   // **Get messages for a specific chat**
   getMessages(chatId: string): Observable<any> {

@@ -8,22 +8,26 @@
       Cancel
     </button>
   </div>
+
+  <!-- Message Input Field -->
   <textarea
-  [(ngModel)]="messageText"
-  [placeholder]="editedMessage ? 'Edit your message...' : 'Type a message...'"
-  (keydown.enter)="sendMessage()"
-  rows="3"
-  class="form-control">
+    [(ngModel)]="messageText"
+    [placeholder]="editedMessage ? 'Edit your message...' : 'Type a message...'"
+    (keydown.enter)="sendMessage()"
+    rows="3"
+    class="form-control">
   </textarea>
-  <!-- Cancel Button: Only show if in edit mode -->
+
+  <!-- Cancel Button (Only in Edit Mode) -->
   <button *ngIf="editedMessage" (click)="cancelEdit()" class="btn btn-secondary">
     Cancel
   </button>
+
+  <!-- Send or Update Button -->
   <button
     class="btn btn-primary"
     (click)="sendMessage()"
-    [disabled]="!messageText.trim() || (!selectedContact?.chatId && !selectedGroup?._id)" 
-  >
-  {{ editedMessage ? 'Update' : 'Send' }}
+    [disabled]="!messageText.trim() || (!selectedContact?.chatId && !selectedGroup?._id)">
+    {{ editedMessage ? 'Update' : 'Send' }}
   </button>
 </div>

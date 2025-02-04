@@ -19,7 +19,6 @@ export class SocketService {
           console.log(`User ${data.userId} is now ${data.status}`);
         }
       });
-
     }
   }
 
@@ -38,24 +37,34 @@ export class SocketService {
   }
 
   // **Send a message (real-time)**
-  sendMessage(senderId: string, receiverId: string, message: string, chatId: string): void {
-    if (!senderId || !receiverId || !message || !chatId) {
-      console.error('Missing parameters for sending message.');
-      return;
-    }
-  
-    const msgData = { senderId, receiverId, message, chatId };
-  
-    this.socket.emit('sendMessage', msgData, (ack: { success: boolean; error?: string }) => {
-      if (!ack.success) {
-        console.error('Error sending message:', ack.error);
-      }
-    });
-  
-    console.log('Message sent:', msgData);
-  }
+  // sendMessage(
+  //   senderId: string,
+  //   receiverId: string,
+  //   message: string,
+  //   chatId: string
+  // ): void {
+  //   if (!senderId || !receiverId || !message || !chatId) {
+  //     console.error('Missing parameters for sending message.');
+  //     return;
+  //   }
 
-   // Listen for incoming messages
+  //   const msgData = { senderId, receiverId, message, chatId };
+
+  //   this.socket.emit(
+  //     'sendMessage',
+  //     msgData,
+  //     (ack: { success: boolean; error?: string }) => {
+  //       if (!ack.success) {
+  //         console.error('Error sending message:', ack.error);
+  //       }
+  //     }
+  //   );
+
+  //   console.log('Message sent:', msgData);
+  // }
+
+  // Listen for incoming messages
+
   onMessageReceived(): Observable<any> {
     return new Observable((observer) => {
       this.socket.on('receiveMessage', (message: any) => {
@@ -67,17 +76,16 @@ export class SocketService {
             return;
           }
         }
-  
+
         if (typeof message === 'object' && message.content) {
           console.log('Real-time message received:', message);
-          observer.next(message);  // Push message to the UI in real-time
+          observer.next(message); // Push message to the UI in real-time
         } else {
           console.error('Received invalid message format:', message);
         }
       });
     });
   }
-  
 
   // Emit an event to check user status
   checkUserStatus(

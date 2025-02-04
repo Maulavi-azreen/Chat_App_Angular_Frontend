@@ -1,4 +1,4 @@
-import { Component, OnInit,NgZone } from '@angular/core';
+import { Component, OnInit,NgZone, ChangeDetectorRef } from '@angular/core';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ChatWindowComponent } from '../chat-window/chat-window.component';
 import { MessageInputComponent } from '../message-input/message-input.component';
@@ -9,6 +9,7 @@ import { ChatService } from '../../service/chat/chat.service';
 import { ChatNavbarComponent } from '../chat-navbar/chat-navbar.component';
 import { SocketService } from '../../service/socket/socket.service';
 import { Socket,io } from 'socket.io-client';
+
 
 
 @Component({
@@ -59,7 +60,8 @@ export class ChatMainComponent implements OnInit {
     private chatService: ChatService,
     private messageService: MessageService,
     private socketService: SocketService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -110,30 +112,66 @@ export class ChatMainComponent implements OnInit {
     }
   }
 
+  // private setupSocketListeners(): void {
+  //   this.socket.off('receiveMessage'); // Remove previous listeners if any
+  //   this.socket.on('receiveMessage', (message: any) => {
+  //     this.ngZone.run(() => {
+  //       console.log('New message received:', message);
+  //       const chatId = message.chatId;
+  
+  //       if (!this.messages[chatId]) {
+  //         this.messages[chatId] = []; // Initialize messages for this chat if not already done
+  //       }
+  
+  //       // Check for duplicates before adding
+  //       const existingMessage = this.messages[chatId].find(msg => msg._id === message._id);
+  //       if (!existingMessage) {
+  //         this.messages[chatId].push(message); // Add the new message
+  //         console.log("Message added to chat:", message);
+  //       } else {
+  //         console.warn("Duplicate message detected, skipping:", message);
+  //       }
+  
+  //       // Update UI if the received message belongs to the currently selected chat
+  //       if (this.selectedChat && this.selectedChat._id === chatId) {
+  //         this.selectedChat.lastMessage = message; // Update the last message
+  //       }
+  //     });
+  //   });
+  // }
+
   private setupSocketListeners(): void {
-    this.socket.off('receiveMessage');
-      this.socket.off('sendMessage'); // Clear previous listeners
+    this.socket.off('receiveMessage'); // Remove previous listeners to prevent duplicates
+  
     this.socket.on('receiveMessage', (message: any) => {
-      this.ngZone.run(() => {  // Force Angular to detect changes
-        console.log('New message received:', message);
-
-        if (message.chat) {
-          const chatId = message.chat;
-          if (!this.messages[chatId]) {
-            this.messages[chatId] = [];
-          }
-
-          this.messages[chatId].push(message);
-          console.log(`Updated messages for chat ${chatId}:`, this.messages[chatId]);
-
-          // If the received message belongs to the currently open chat, update UI
-          if (this.selectedChat && this.selectedChat._id === chatId) {
-            this.selectedChat.lastMessage = message;
-          }
+      this.ngZone.run(() => { // Ensure Angular detects changes
+        console.log('📩 New message received:', message);
+  
+        const chatId = message.chat._id || message.chat; // Ensure correct chat ID
+  
+        if (!this.messages[chatId]) {
+          this.messages[chatId] = []; // Initialize messages array if not present
         }
+  
+        // **Check for duplicates before adding**
+        const existingMessage = this.messages[chatId].find(msg => msg._id === message._id);
+        if (!existingMessage) {
+          this.messages[chatId].push(message);
+          console.log("✅ Message added to chat:", message);
+        } else {
+          console.warn("⚠️ Duplicate message detected, skipping:", message);
+        }
+  
+        // **Update last message in chat if it's the selected one**
+        if (this.selectedChat && this.selectedChat._id === chatId) {
+          this.selectedChat.lastMessage = message;
+        }
+  
+        this.cdr.detectChanges(); // **Manually trigger UI update**
       });
     });
   }
+  
 
   // Fetch contacts
   fetchContacts(): void {
@@ -277,21 +315,17 @@ export class ChatMainComponent implements OnInit {
       return;
     }
   
-     // Check if the chat is a group chat or an individual chat
-  const isGroupChat = this.selectedChat?.isGroupChat || false;
-  console.log(`Loading messages for ${isGroupChat ? 'Group' : 'Individual'} Chat:`, chatId);
-
-  this.messageService.getMessages(chatId).subscribe({
-    next: (messages) => {
-      this.messages[chatId] = messages; // Store messages based on chatId
-      console.log(`Messages loaded for ${isGroupChat ? 'group' : 'individual'} chat:`, messages);
-    },
+    this.messageService.getMessages(chatId).subscribe({
+      next: (messages) => {
+        this.messages[chatId] = messages; // Store messages based on chatId
+        console.log('Messages loaded for chat:', messages);
+      },
       error: (err) => {
         console.error('Error loading messages:', err);
       },
     });
   }
-
+  
 
   // Handle message sent for new msg and edited msg
   //triggered when a message is sent in the child component ie in chat window through message input
