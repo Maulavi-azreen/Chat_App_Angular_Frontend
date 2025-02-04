@@ -36,33 +36,6 @@ export class SocketService {
     return this.socket;
   }
 
-  // **Send a message (real-time)**
-  // sendMessage(
-  //   senderId: string,
-  //   receiverId: string,
-  //   message: string,
-  //   chatId: string
-  // ): void {
-  //   if (!senderId || !receiverId || !message || !chatId) {
-  //     console.error('Missing parameters for sending message.');
-  //     return;
-  //   }
-
-  //   const msgData = { senderId, receiverId, message, chatId };
-
-  //   this.socket.emit(
-  //     'sendMessage',
-  //     msgData,
-  //     (ack: { success: boolean; error?: string }) => {
-  //       if (!ack.success) {
-  //         console.error('Error sending message:', ack.error);
-  //       }
-  //     }
-  //   );
-
-  //   console.log('Message sent:', msgData);
-  // }
-
   // Listen for incoming messages
 
   onMessageReceived(): Observable<any> {
@@ -105,6 +78,42 @@ export class SocketService {
       });
     });
   }
+
+  emitTyping(senderId: string, chatId: string, senderName: string): void {
+    if (!senderId || !chatId || !senderName) {
+      console.warn("🚨 emitTyping called with missing data:", { senderId, chatId, senderName });
+      return;
+    }
+  
+    console.log("📤 Emitting typing event →", { chatId, senderId, senderName });
+    this.socket.emit('typing', { chatId, senderId, senderName });
+  }
+  
+  
+  emitStopTyping(senderId: string, chatId: string): void {
+    console.log(`🛑 Emitting stopTyping event → Chat: ${chatId}, User ID: ${senderId}`);
+    this.socket.emit('stopTyping', { senderId, chatId });
+  }
+  
+  listenForTyping(): Observable<any> {
+    return new Observable((observer) => {
+      this.socket.on('typing', (data) => {
+        console.log(`📥 Typing event received →`, data);
+        observer.next(data);
+      });
+    });
+  }
+  
+  listenForStopTyping(): Observable<any> {
+    return new Observable((observer) => {
+      this.socket.on('stopTyping', (data) => {
+        console.log(`📥 StopTyping event received →`, data);
+        observer.next(data);
+      });
+    });
+  }
+  
+  
 
   // Disconnect the socket when needed
   disconnect() {

@@ -21,7 +21,7 @@ export class MessageService {
       console.log("📡 Preparing API call for message:", { content, chatId, senderId, receiverId });
     
       if (!content || !chatId || !senderId || !receiverId) {
-        console.error('❌ MessageService.sendMessage: Missing required fields:', { content, chatId, senderId, receiverId });
+        console.error('MessageService.sendMessage: Missing required fields:', { content, chatId, senderId, receiverId });
         throw new Error('Content, chatId, senderId, and receiverId are required');
       }
     

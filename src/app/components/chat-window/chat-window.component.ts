@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {Component,Input,EventEmitter,Output,OnInit} from '@angular/core';
+import {Component,Input,EventEmitter,Output} from '@angular/core';
 import {Socket} from 'socket.io-client';
 import { MessageService } from '../../service/message/message.service';
 import { ChatService } from '../../service/chat/chat.service';
@@ -17,6 +17,8 @@ export class ChatWindowComponent {
   @Input() messages: { [key: string]: any[] } = {}; // Messages grouped by chatId
   @Input() selectedContact: any; // Selected contact
   @Input() currentUser: any; // Logged-in user
+  @Input() typingIndicatorVisible: boolean=false; 
+  @Input() typingUser: string = '';
   @Output() editMessage = new EventEmitter<any>(); // EventEmitter for emitting message edit event
   @Output() replyMessage = new EventEmitter<any>(); // EventEmitter for emitting message replies event
   @Output() clearMessages = new EventEmitter<void>(); // Notify parent component about clearing messages
@@ -40,75 +42,13 @@ export class ChatWindowComponent {
     this.socket = this.socketService.getSocket();
   }
 
-  // Function to send a message in both individual and group chats
-  // sendMessage(): void {
-  //   if (!this.selectedChat || !this.messageText.trim()) {
-  //     console.warn('No chat selected or empty message.');
-  //     return;
-  //   }
+  ngOnChanges(): void {
+    // Manually trigger change detection to make sure the view is updated
+    this.cdr.detectChanges();
+  }
+
   
-  //   const chatId = this.selectedChat._id;
-  //   const receiverId = this.getReceiverId();
-  
-  //   if (!chatId || !receiverId) {
-  //     console.error('Invalid chat or receiver ID.');
-  //     return;
-  //   }
-  
-  //   const message = {
-  //     chatId: chatId,
-  //     senderId: this.currentUser._id,
-  //     receiverId: receiverId,
-  //     content: this.messageText,
-  //     createdAt: new Date(),
-  //     repliedTo: this.messageBeingRepliedTo
-  //       ? {
-  //           _id: this.messageBeingRepliedTo._id,
-  //           content: this.messageBeingRepliedTo.content,
-  //         }
-  //       : null,
-  //   };
-  
-  //   if (this.messageBeingEdited) {
-  //     // Handle editing logic
-  //     this.messageService.editMessage(this.messageBeingEdited._id, this.messageText).subscribe({
-  //       next: () => {
-  //         this.socketService.sendMessage(
-  //           message.senderId,
-  //           message.receiverId,
-  //           `${this.messageText} (Edited)`,
-  //           message.chatId
-  //         );
-  //         this.resetEditState();
-  //       },
-  //       error: (error) => console.error('Error editing message:', error),
-  //     });
-  //   } else {
-  //     // **Send message using SocketService but DON'T update UI manually**
-  //     this.socketService.sendMessage(
-  //       message.senderId,
-  //       message.receiverId,
-  //       message.content,
-  //       message.chatId
-  //     );
-  //   }
-  
-  //   // Reset input fields
-  //   this.messageText = '';
-  //   this.messageBeingRepliedTo = null; // Clear reply state
-  // }
-  
-    
-    // **Helper function to get receiverId based on chat type**
-  // private getReceiverId(): string {
-  //   if (this.selectedChat.isGroupChat) {
-  //     return this.selectedChat._id; // For group chats, the receiver is the group itself
-  //   } else {
-  //     return this.selectedChat.participants.find(
-  //       (participant: any) => participant._id !== this.currentUser._id
-  //     )?._id;
-  //   }
-  // }
+
 
   // Start editing a message
   onEditMessage(message: any): void {

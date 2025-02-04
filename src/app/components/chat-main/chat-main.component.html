@@ -13,14 +13,16 @@
   <!-- Chat Window -->
   <div class="chat-window col-12 col-md-8 d-flex flex-column">
     <!-- Show Placeholder if No Contact is Selected -->
-    <ng-container *ngIf="selectedChat && messages[selectedChat._id]; else placeholder">
+    <ng-container
+      *ngIf="selectedChat && messages[selectedChat._id]; else placeholder"
+    >
       <!-- Navbar -->
       <div class="chat-navbar">
-        <app-chat-navbar 
-        [selectedContact]="selectedContact"
-        [selectedGroup]="selectedGroup"
-        [userStatus]="userStatus"
-        (chatDeleted)="fetchChats()"
+        <app-chat-navbar
+          [selectedContact]="selectedContact"
+          [selectedGroup]="selectedGroup"
+          [userStatus]="userStatus"
+          (chatDeleted)="fetchChats()"
         >
         </app-chat-navbar>
       </div>
@@ -31,6 +33,8 @@
           [selectedChat]="selectedChat"
           [currentUser]="currentUser"
           [messages]="messages"
+          [typingIndicatorVisible]="typingIndicatorVisible"
+          [typingUser]="typingUser"
           [selectedContact]="selectedContact"
           (editMessage)="onEditMessage($event)"
           (replyMessage)="onReplyMessage($event)"
@@ -53,12 +57,14 @@
 
     <!-- Placeholder Template -->
     <ng-template #placeholder>
-      <div class="placeholder-container d-flex flex-column justify-content-center align-items-center h-100">
+      <div
+        class="placeholder-container d-flex flex-column justify-content-center align-items-center h-100"
+      >
         <img
           src="assets/img/start-img.jpg"
           alt="Chat Illustration"
           class="img-fluid"
-          style="max-width: 500px;"
+          style="max-width: 500px"
         />
         <p class="text-muted mt-3">Select a contact to start chatting</p>
       </div>

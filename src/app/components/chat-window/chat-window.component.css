@@ -138,3 +138,14 @@
   background: transparent; /* Light background to make it visible */
   
 }
+.typing-indicator {
+  font-style: italic;
+  color: #888;
+  padding: 5px;
+  display: block; /* Ensure it’s being shown */
+  position: absolute; /* If needed, you can adjust its position */
+  bottom: 10px; /* Optional, adjust as needed */
+  left: 10px; /* Optional, adjust as needed */
+  z-index: 999; /* Ensure it's above other elements */
+}
+

@@ -50,3 +50,9 @@
   align-items: center;
   height: 100%;
 }
+
+.typing-indicator {
+  font-style: italic;
+  color: #888;
+  padding: 5px;
+}

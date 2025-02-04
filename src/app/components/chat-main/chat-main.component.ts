@@ -55,6 +55,9 @@ export class ChatMainComponent implements OnInit {
 
   userStatus: string = 'offline';   //user status
 
+  typingIndicatorVisible = false;  // This will control the visibility of the typing indicator
+  typingUser: string = '';  // This will store the name of the typing user
+
   constructor(
     private userService: UserService,
     private chatService: ChatService,
@@ -65,8 +68,11 @@ export class ChatMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.socket = this.socketService.getSocket();
+    this.socket = this.socketService.getSocket();  
+    console.log("📡 Calling subscribeToTypingEvents...");
+    this.subscribeToTypingEvents();  
     this.setupSocketListeners();
+   
 
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -112,40 +118,12 @@ export class ChatMainComponent implements OnInit {
     }
   }
 
-  // private setupSocketListeners(): void {
-  //   this.socket.off('receiveMessage'); // Remove previous listeners if any
-  //   this.socket.on('receiveMessage', (message: any) => {
-  //     this.ngZone.run(() => {
-  //       console.log('New message received:', message);
-  //       const chatId = message.chatId;
-  
-  //       if (!this.messages[chatId]) {
-  //         this.messages[chatId] = []; // Initialize messages for this chat if not already done
-  //       }
-  
-  //       // Check for duplicates before adding
-  //       const existingMessage = this.messages[chatId].find(msg => msg._id === message._id);
-  //       if (!existingMessage) {
-  //         this.messages[chatId].push(message); // Add the new message
-  //         console.log("Message added to chat:", message);
-  //       } else {
-  //         console.warn("Duplicate message detected, skipping:", message);
-  //       }
-  
-  //       // Update UI if the received message belongs to the currently selected chat
-  //       if (this.selectedChat && this.selectedChat._id === chatId) {
-  //         this.selectedChat.lastMessage = message; // Update the last message
-  //       }
-  //     });
-  //   });
-  // }
-
   private setupSocketListeners(): void {
+    console.log("📡 Setting up socket listeners...");
     this.socket.off('receiveMessage'); // Remove previous listeners to prevent duplicates
-  
     this.socket.on('receiveMessage', (message: any) => {
       this.ngZone.run(() => { // Ensure Angular detects changes
-        console.log('📩 New message received:', message);
+        console.log('New message received:', message);
   
         const chatId = message.chat._id || message.chat; // Ensure correct chat ID
   
@@ -157,21 +135,55 @@ export class ChatMainComponent implements OnInit {
         const existingMessage = this.messages[chatId].find(msg => msg._id === message._id);
         if (!existingMessage) {
           this.messages[chatId].push(message);
-          console.log("✅ Message added to chat:", message);
+          console.log("Message added to chat:", message);
         } else {
-          console.warn("⚠️ Duplicate message detected, skipping:", message);
+          console.warn("Duplicate message detected, skipping:", message);
         }
   
         // **Update last message in chat if it's the selected one**
         if (this.selectedChat && this.selectedChat._id === chatId) {
           this.selectedChat.lastMessage = message;
         }
-  
+
         this.cdr.detectChanges(); // **Manually trigger UI update**
       });
     });
   }
-  
+
+  private subscribeToTypingEvents(): void {
+    this.socketService.listenForTyping().subscribe((data: any) => {
+      this.ngZone.run(() => {
+        console.log("🔥 Typing event received in ChatMain:", data);
+
+        if (this.selectedChat && data.chatId === this.selectedChat?._id) {
+          this.typingIndicatorVisible = true;
+          this.typingUser = data.userName || 'Someone';
+          console.log(`✍️ ${this.typingUser} is typing in chat: ${data.chatId}`);
+    
+          this.cdr.detectChanges(); // ✅ Force UI update
+    
+          setTimeout(() => {
+            this.typingIndicatorVisible = false;
+            console.log(`⌛ Hiding typing indicator after timeout`);
+            this.cdr.detectChanges();
+          }, 3000);
+        }
+      });
+    });
+
+    this.socketService.listenForStopTyping().subscribe((data: any) => {
+      this.ngZone.run(() => {
+        if (data.chatId === this.selectedChat?._id) {
+          this.typingIndicatorVisible = false;
+          console.log(`🛑 Typing indicator hidden for chat: ${data.chatId}`);
+          this.cdr.detectChanges();
+        }
+      });
+    });
+  }
+  getTypingUserName(): string {
+    return this.typingUser || 'Someone';
+  }
 
   // Fetch contacts
   fetchContacts(): void {

@@ -42,3 +42,8 @@
   color: #bbb;
   cursor: not-allowed;
 }
+.typing-indicator {
+  font-style: italic;
+  color: #888;
+  padding: 5px;
+}

@@ -92,6 +92,10 @@
       </div>
     </ng-container>
   </div>
+    <!-- 🔥 Typing Indicator -->
+    <div *ngIf="typingIndicatorVisible" class="typing-indicator">
+      <span>{{ typingUser || 'Someone' }} is typing...</span>
+    </div>
 
   <!-- No Messages Placeholder -->
   <ng-template #noMessages>
