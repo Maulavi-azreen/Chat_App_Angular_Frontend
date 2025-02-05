@@ -6,6 +6,7 @@ import { ChatService } from '../../service/chat/chat.service';
 import { SocketService } from '../../service/socket/socket.service';
 import { ChangeDetectorRef } from '@angular/core';
 
+
 @Component({
   selector: 'app-chat-window',
   imports: [CommonModule],
@@ -17,8 +18,6 @@ export class ChatWindowComponent {
   @Input() messages: { [key: string]: any[] } = {}; // Messages grouped by chatId
   @Input() selectedContact: any; // Selected contact
   @Input() currentUser: any; // Logged-in user
-  @Input() typingIndicatorVisible: boolean=false; 
-  @Input() typingUser: string = '';
   @Output() editMessage = new EventEmitter<any>(); // EventEmitter for emitting message edit event
   @Output() replyMessage = new EventEmitter<any>(); // EventEmitter for emitting message replies event
   @Output() clearMessages = new EventEmitter<void>(); // Notify parent component about clearing messages
@@ -44,11 +43,8 @@ export class ChatWindowComponent {
 
   ngOnChanges(): void {
     // Manually trigger change detection to make sure the view is updated
-    this.cdr.detectChanges();
-  }
-
-  
-
+      this.cdr.detectChanges();
+}
 
   // Start editing a message
   onEditMessage(message: any): void {

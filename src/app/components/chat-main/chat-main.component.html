@@ -23,6 +23,8 @@
           [selectedGroup]="selectedGroup"
           [userStatus]="userStatus"
           (chatDeleted)="fetchChats()"
+          [typingIndicatorVisible]="typingIndicatorVisible"
+          [typingUser]="typingUser"
         >
         </app-chat-navbar>
       </div>
@@ -33,8 +35,6 @@
           [selectedChat]="selectedChat"
           [currentUser]="currentUser"
           [messages]="messages"
-          [typingIndicatorVisible]="typingIndicatorVisible"
-          [typingUser]="typingUser"
           [selectedContact]="selectedContact"
           (editMessage)="onEditMessage($event)"
           (replyMessage)="onReplyMessage($event)"

@@ -22,6 +22,7 @@ export class MessageInputComponent {
 
   messageText: string = '';
   typingTimeout: any;
+  typing: boolean = false; // Prevent duplicate typing events
 
   constructor(
     private messageService: MessageService,
@@ -30,28 +31,33 @@ export class MessageInputComponent {
 
    // Triggered when the user types in the message input field
    onInputChange(): void {
-    console.log("🔍 onInputChange() called!");
+    console.log("⌨️ onInputChange triggered!");
+
     const senderId = this.currentUser?._id;
     const chatId = this.selectedContact?.chatId || this.selectedGroup?._id;
     const senderName = this.currentUser?.name;
-    console.log("Data in onInputChange",senderId,"..",chatId,"...",senderName);
-  
-    if (!senderId || !chatId || !senderName) {
-      console.warn("❌ onInputChange called with missing parameters!", { senderId, chatId, senderName });
-      return;
+
+    if (!senderId || !chatId || !senderName) return;
+
+    // Emit "typing" event only if not already typing
+    if (!this.typing) {
+      this.typing = true;
+      console.log(`📤 Emitting typing event → Chat: ${chatId}, User: ${senderName}`);
+      this.socketService.emitTyping(senderId, chatId, senderName);
+      this.typingIndicator.emit(true);
     }
-  
-    console.log(`⌨️ ${senderName} is typing in chat: ${chatId}`);
-    
-    this.socketService.emitTyping(senderId, chatId, senderName);
-  
-    // Clear previous timeout and set a new one
+
+    // Reset typing state after 3 seconds
     clearTimeout(this.typingTimeout);
     this.typingTimeout = setTimeout(() => {
-      console.log(`⌛ Stopping typing indication for ${senderName} in chat: ${chatId}`);
+      this.typing = false;
+      console.log(`🛑 Emitting stopTyping event → Chat: ${chatId}, User: ${senderName}`);
       this.socketService.emitStopTyping(senderId, chatId);
-    }, 1000);
+      this.typingIndicator.emit(false);
+    }, 5000);
   }
+
+  
   
   //triggered when send button is clicked
   sendMessage(): void {
@@ -88,6 +94,7 @@ export class MessageInputComponent {
       receiver: { _id: receiverId },
       content: messageContent, // Use stored message
       chat: chatId,
+      replyTo: this.repliedMessage ? this.repliedMessage._id : null,
       createdAt: new Date(),
     };
 
@@ -100,7 +107,8 @@ export class MessageInputComponent {
         messageContent, // Use stored message
         chatId,
         senderId,
-        receiverId
+        receiverId,
+        
       )
       .subscribe({
         next: (response) => {

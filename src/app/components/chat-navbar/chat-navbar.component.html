@@ -5,15 +5,18 @@
     class="rounded-circle me-2"
     style="width: 50px; height: 50px;"
   />
+
   <span class="fw-bold">
+    
      <!-- For individual chats, show name and user status -->
      <ng-container *ngIf="!isGroupChat">
       {{ selectedContact?.name }}
-
+      
     </ng-container>
     <small *ngIf="!isGroupChat" [ngClass]="{'text-success': userStatus === 'online', 'text-danger': userStatus === 'offline'}">
       {{ userStatus }}
     </small>
+    
     <!-- For group chats, show group name and list of members -->
     <ng-container *ngIf="isGroupChat">
       {{ selectedGroup?.chatName }}
@@ -21,6 +24,12 @@
         <span *ngFor="let member of selectedGroup?.users; let last = last" class="member-name">
           {{ member.name }}<span *ngIf="!last">, </span>
         </span>
+        <!-- Typing Indicator -->
+        <!-- <div *ngIf="typingIndicatorVisible" class="typing-indicator">
+          {{ typingUser }} is typing...
+      </div> -->
+        
+      
       </div>
     </ng-container>
     </span>    
@@ -47,6 +56,9 @@
     >
       <i class="bi bi-box-arrow-right"></i>
     </button>
+  </div>
+  <div *ngIf="typingIndicatorVisible" class="typing-indicator mt-5">
+    {{ typingUser }} is typing...
   </div>
   
 </div>

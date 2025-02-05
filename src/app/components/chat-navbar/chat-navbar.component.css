@@ -16,3 +16,14 @@
 .chat-navbar span {
   font-weight: bold;
 }
+.typing-indicator {
+  display: block;
+  font-style: italic;
+  color: rgb(241, 240, 240);
+  animation: fadeInOut 1.5s infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}

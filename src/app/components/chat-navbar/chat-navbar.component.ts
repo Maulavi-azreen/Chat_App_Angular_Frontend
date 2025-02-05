@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component ,Input,Output,EventEmitter} from '@angular/core';
+import { Component ,Input,Output,EventEmitter,SimpleChanges,ChangeDetectorRef } from '@angular/core';
 import { ChatService } from '../../service/chat/chat.service';
 
 
@@ -13,15 +13,26 @@ export class ChatNavbarComponent{
   @Input() selectedContact: any;
   @Input() selectedGroup : any;
   @Input() userStatus: string = 'offline';
+  @Input() typingIndicatorVisible: boolean = false;
+  @Input() typingUser: string = '';
+
 
   @Output() chatDeleted = new EventEmitter<void>();
+  
 
 
   chats : any[]=[]
   groups:any[]=[]
 
 
-  constructor(private chatService: ChatService){}
+  constructor(private chatService: ChatService, private cdr: ChangeDetectorRef){}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['typingIndicatorVisible']) {
+      console.log("👀 Typing Indicator Changed:", this.typingIndicatorVisible);
+      this.cdr.detectChanges();
+    }
+  }
 
 
    // Determine if it's a group chat or individual chat for rendering icons on navbar accordingly
